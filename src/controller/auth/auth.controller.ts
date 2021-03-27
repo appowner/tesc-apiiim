@@ -1,16 +1,20 @@
-import { Controller, Request, Post, UseGuards, Get, Body } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/service/auth/jwt-auth-guard';
-import { AuthService } from 'src/auth/service/auth/auth.service';
-import { LocalAuthGuard } from 'src/auth/service/auth/local-auth.guard';
+import { Controller, Request, Post, UseGuards, Get, Body, UseFilters } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/service/auth/jwt-auth-guard';
+import { AuthService } from 'src/service/auth/auth.service';
+import { LocalAuthGuard } from 'src/service/auth/local-auth.guard';
+import { JwtService } from '@nestjs/jwt';
+import { ResponseObject } from 'src/model/response-object';
+import { CustomGLobalExceptionHandler } from 'src/CustomGLobalExceptionHandler';
 
 @Controller('auth')
+@UseFilters(new CustomGLobalExceptionHandler())
 export class AuthController {
 
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService, private jwtService: JwtService) {}
 
     // @UseGuards(LocalAuthGuard)
     @Post('login')
-    async login(@Body("userName") userName: string, @Body("password") password: string) {
+    async login(@Body("userName") userName: string, @Body("password") password: string) : Promise<ResponseObject<{}>> {
       return this.authService.login(userName, password);
     }
   
