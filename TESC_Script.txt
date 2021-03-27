@@ -1,0 +1,423 @@
+DROP SEQUENCE IF EXISTS hibernate_sequence;
+
+DROP TABLE IF EXISTS inquiry;
+DROP TABLE IF EXISTS trip;
+
+DROP TABLE IF EXISTS gps_data;
+DROP TABLE IF EXISTS latest_gps_data;
+DROP TABLE IF EXISTS vehicle;
+DROP TABLE IF EXISTS user_mst;
+DROP TABLE IF EXISTS lov_val;
+DROP TABLE IF EXISTS lov_mst;
+DROP TABLE IF EXISTS security_policy;
+
+DROP TABLE IF EXISTS role_privilege_mapping;
+DROP TABLE IF EXISTS role_menu_mapping;
+DROP TABLE IF EXISTS menu_privilege;
+DROP TABLE IF EXISTS menu;
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS company_detail;
+DROP TABLE IF EXISTS address;
+
+
+
+DROP SEQUENCE IF EXISTS lov_mst_sequence;
+DROP SEQUENCE IF EXISTS lov_val_sequence;
+DROP SEQUENCE IF EXISTS user_mst_sequence;
+DROP SEQUENCE IF EXISTS role_sequence;
+DROP SEQUENCE IF EXISTS menu_sequence;
+DROP SEQUENCE IF EXISTS menu_privilege_sequence;
+DROP SEQUENCE IF EXISTS role_menu_mapping_sequence;
+DROP SEQUENCE IF EXISTS menu_privilege_sequence;
+DROP SEQUENCE IF EXISTS role_privilege_mapping_sequence;
+DROP SEQUENCE IF EXISTS company_detail_sequence;
+DROP SEQUENCE IF EXISTS vehicle_sequence;
+DROP SEQUENCE IF EXISTS inquiry_sequence;
+DROP SEQUENCE IF EXISTS trip_sequence;
+DROP SEQUENCE IF EXISTS gps_data_sequence;
+DROP SEQUENCE IF EXISTS latest_gps_data_sequence;
+
+
+
+CREATE SEQUENCE hibernate_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+CREATE SEQUENCE address_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 100000
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE  address (
+  id		        bigint                     	NOT NULL  DEFAULT nextval('address_sequence'),
+  address1          varchar(50)         		DEFAULT NULL,
+  address2          varchar(50)         		DEFAULT NULL,
+  city              varchar(50)         		DEFAULT NULL,
+  district          varchar(50)         		DEFAULT NULL,
+  state             varchar(60)         		DEFAULT NULL,
+  country           varchar(50)         		DEFAULT NULL,
+  pincode           varchar(20)         		DEFAULT NULL,
+
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE  security_policy (
+  id                            bigint     NOT NULL   DEFAULT nextval('hibernate_sequence'),
+  min_pass_length               int        NOT NULL,
+  pwd_exp_days                  int        NOT NULL,
+  user_prom_days               	int        NOT NULL,
+  lock_attem                    int        NOT NULL,
+  lock_duration           		int        NOT NULL,
+  dup_pwd_lst                   int        NOT NULL,
+  is_number                     int        NOT NULL DEFAULT '0',
+  is_upper_case                 int        NOT NULL DEFAULT '0',
+  is_symbol                     int        NOT NULL DEFAULT '0',
+  max_pass_length				int		   NOT NULL DEFAULT '15',
+  
+  PRIMARY KEY (id)
+
+);
+
+INSERT INTO security_policy VALUES (1, 8, 90, 5, 3, 120, 5, 0, 0, 0, 20);
+
+CREATE SEQUENCE lov_mst_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 500
+	CACHE 1
+	NO CYCLE;
+
+CREATE TABLE  lov_mst (
+  id       bigint  			NOT NULL   DEFAULT nextval('lov_mst_sequence'),
+  name     varchar(40) 		NOT NULL,
+  descr    varchar(100) 	NOT NULL,
+  editable boolean  		NOT NULL,
+
+  PRIMARY KEY (id)
+);
+
+CREATE SEQUENCE lov_val_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 100000
+	CACHE 1
+	NO CYCLE;
+
+CREATE TABLE  lov_val (
+  id           bigint   		NOT NULL    DEFAULT nextval('lov_val'),
+  name         varchar(100) 	NOT NULL,
+  value        varchar(100) 	NOT NULL,
+  parent       bigint 			NOT NULL,
+  active       boolean 			NOT NULL,
+
+  PRIMARY KEY (id),
+  CONSTRAINT lov_parent_fk FOREIGN KEY (parent) REFERENCES lov_mst (id)
+);
+
+CREATE SEQUENCE user_mst_sequence
+	INCREMENT BY 1
+	MINVALUE 101
+	MAXVALUE 9223372036854775807
+	START 101
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE  user_mst (
+  id                    bigint             	NOT NULL    DEFAULT nextval('user_mst_sequence'),
+  first_name            varchar(20)         NOT NULL,
+  last_name             varchar(20)         NOT NULL, 
+  user_name             varchar(100)       	NOT NULL,
+  password              varchar(500)       	DEFAULT NULL,
+  invalid_password_try  int    ,         
+  address_id            bigint              NOT NULL,
+  email             varchar(100)         NOT NULL,
+  contact_number        varchar(15)          NOT NULL,
+  type                  int              NOT NULL,
+  otp                   int               NOT NULL,
+  otp_time               timestamp,
+  active		         boolean    default false,
+ 
+  PRIMARY KEY (id),
+  CONSTRAINT user_mst_address_fk FOREIGN KEY (address_id) REFERENCES address (id)
+  
+);
+
+CREATE SEQUENCE role_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE  role (
+	id                  bigint            NOT NULL,
+	name                varchar(15)       NOT NULL,
+	description          varchar(50),
+	
+	  PRIMARY KEY (id)
+	);
+
+
+CREATE SEQUENCE menu_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE  menu (
+	id                  bigint            NOT NULL,
+	name                varchar(15)       NOT NULL,
+	icon                varchar(100)       DEFAULT NULL,
+	url                 varchar(100)      NOT NULL,
+	status              int,
+		
+	  PRIMARY KEY (id)
+	);
+	
+CREATE SEQUENCE menu_privilege_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE  menu_privilege (
+	id                  bigint            NOT NULL,
+	menu_id                bigint       NOT NULL,
+	name                varchar(20)       NOT NULL,
+	type                 varchar(30)      NOT NULL,
+
+		
+	  PRIMARY KEY (id),
+	   CONSTRAINT menu_id_fk FOREIGN KEY (menu_id) REFERENCES menu (id)
+	);
+	
+	
+	CREATE SEQUENCE role_menu_mapping_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE  role_menu_mapping (
+	id                  bigint            NOT NULL,
+	role_id             bigint           NOT NULL,
+	menu_id                bigint       NOT NULL,
+	
+
+		
+	  PRIMARY KEY (id),
+	   CONSTRAINT menu_id_fk FOREIGN KEY (menu_id) REFERENCES menu (id),
+	   CONSTRAINT role_id_fk FOREIGN KEY (role_id) REFERENCES role (id)
+	);
+	
+	
+	
+		CREATE SEQUENCE role_privilege_mapping_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE  role_privilege_mapping (
+	id                  bigint            NOT NULL,
+	role_id             bigint           NOT NULL,
+	privilege_id        bigint           NOT NULL,
+	
+
+		
+	  PRIMARY KEY (id),
+	   CONSTRAINT privilege_id_fk FOREIGN KEY (privilege_id) REFERENCES menu_privilege (id),
+	   CONSTRAINT role_id_fk FOREIGN KEY (role_id) REFERENCES role (id)
+	);
+	
+	
+	
+	
+ CREATE SEQUENCE company_detail_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE  company_detail (
+	id                  bigint            NOT NULL,
+	name             bigint           NOT NULL,
+	address_id        bigint           NOT NULL,
+	type              int,
+	
+
+		
+	  PRIMARY KEY (id),
+	   CONSTRAINT address_id_fk FOREIGN KEY (address_id) REFERENCES address (id)
+	   
+	);
+	
+	 CREATE SEQUENCE vehicle_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE  vehicle (
+	id                    bigint            NOT NULL,
+	type                   int,
+	vendor_company_id       bigint              NOT NULL,
+	unique_number        varchar(30)         NOT NULL,   
+	transport_company_id  bigint             ,
+	driver_detail_id      bigint             NOT NULL,
+	truck_no              varchar,
+	puc_no                varchar ,  
+	fitness_details       varchar, 
+	rc_details            varchar ,
+	validityy_details     varchar ,
+	rate                   int,
+	status                 varchar,
+		
+	  PRIMARY KEY (id),
+	   CONSTRAINT vendor_company_id_fk FOREIGN KEY (vendor_company_id) REFERENCES company_detail (id),
+	   CONSTRAINT driver_detail_id_fk FOREIGN KEY (driver_detail_id) REFERENCES user_mst (id)
+	   
+	);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	 CREATE SEQUENCE inquiry_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	
+	CREATE TABLE inquiry(
+	id                            bigint           NOT NULL,
+	name                          varchar(30)      NOT NULL,
+	pickup_time                   timestamp        NOT NULL,
+	pickup_poi                    varchar          NOT NULL,
+	pickup_lat                    DOUBLE PRECISION           NOT NULL,
+	pickup_long                   DOUBLE PRECISION           NOT NULL,
+	destination_poi               varchar          NOT NULL,
+	destination_lat               DOUBLE PRECISION          NOT NULL,
+	detination_long               DOUBLE PRECISION           NOT NULL,
+	pickup_address_id                bigint           NOT NULL,
+	destination_address_id           bigint           NOT NULL,
+	vehicle_type                  varchar          DEFAULT NULL,
+	
+	  PRIMARY KEY (id),
+	   CONSTRAINT pickup_address_id_fk FOREIGN KEY (pickup_address_id) REFERENCES address (id),
+	   CONSTRAINT destination_address_id_fk FOREIGN KEY (destination_address_id) REFERENCES address (id)
+	
+	);
+	
+	
+	
+	 CREATE SEQUENCE trip_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	
+	CREATE TABLE trip(
+	id                            bigint           NOT NULL,
+	name                          varchar(30)      NOT NULL,
+	vendor_id                         bigint          NOT NULL ,
+	customer_id                         bigint          NOT NULL ,
+	vehicle_id                         bigint          NOT NULL ,
+	status                           int,
+	start_time                      timestamp,
+	pickup_poi                    varchar          NOT NULL,
+	pickup_lat                    DOUBLE PRECISION           NOT NULL,
+	pickup_long                   DOUBLE PRECISION           NOT NULL,
+	destination_poi               varchar          NOT NULL,
+	destination_lat               DOUBLE PRECISION          NOT NULL,
+	detination_long               DOUBLE PRECISION           NOT NULL,
+	pickup_address_id                bigint           NOT NULL,
+	destination_address_id           bigint           NOT NULL,
+	
+	
+	  PRIMARY KEY (id),
+	   CONSTRAINT vendor_id_fk FOREIGN KEY (vendor_id) REFERENCES user_mst (id),
+	   CONSTRAINT customer_id_fk FOREIGN KEY (customer_id) REFERENCES user_mst (id),
+	   CONSTRAINT vehicle_id_fk FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)
+	
+	);
+	
+	
+	
+	 CREATE SEQUENCE gps_data_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE gps_data(
+	id                            bigint              NOT NULL,
+	vehicle_id                    bigint              NOT NULL,
+	lat                           DOUBLE PRECISION              NOT NULL,
+	long                          DOUBLE PRECISION              NOT NULL,
+    dateTime                      timestamp            NOT NULL,
+    poi                           varchar             DEFAULT NULL,
+
+	PRIMARY KEY (id),
+	   CONSTRAINT vehicle_id_fk FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)
+	
+	);
+	
+	
+		
+	 CREATE SEQUENCE latest_gps_data_sequence
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+	
+	CREATE TABLE latest_gps_data(
+	id                            bigint              NOT NULL,
+	vehicle_id                    bigint              NOT NULL,
+	lat                           DOUBLE PRECISION              NOT NULL,
+	long                          DOUBLE PRECISION              NOT NULL,
+   
+   PRIMARY KEY (id),
+	   CONSTRAINT vehicle_id_fk FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)
+	
+	);
