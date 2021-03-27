@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
-import { LovValEntity } from './lov-val.entity';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
 
 @Entity({ name: "address" })
 export class AddressEntity {
