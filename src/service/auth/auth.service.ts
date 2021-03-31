@@ -7,6 +7,7 @@ import { BusinessException } from 'src/model/business-exception';
 import { AuthToken } from 'src/model/auth-token';
 import { ResponseObject } from 'src/model/response-object';
 import { BusinessError } from 'src/model/business-error';
+import { UserMstEntity } from 'src/entity/user-mst.entity';
 
 @Injectable()
 export class AuthService {
@@ -30,6 +31,8 @@ export class AuthService {
             map["user"] = user;
             let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
             let ro: ResponseObject<{}> = new ResponseObject(be, map);
+           
+          
             return ro;
         }else{
             throw new BusinessException(Constants.FAILURE_CODE, Constants.INVALID_CREDENTIALS);
@@ -37,8 +40,15 @@ export class AuthService {
         
     }
 
+ 
+
     async login(username: string, password :  string) : Promise<ResponseObject<{}>> {
         return await this.validateUser(username, password);        
+    }
+
+    async generateOtp() : Promise<number> {
+        const otp =  Math.floor(100000 + Math.random() * 900000);
+        return otp;        
     }
 
 }
