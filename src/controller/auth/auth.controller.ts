@@ -17,6 +17,12 @@ export class AuthController {
     async login(@Body("userName") userName: string, @Body("password") password: string) : Promise<ResponseObject<{}>> {
       return this.authService.login(userName, password);
     }
+
+    @Get('getotp')
+    async getotp() : Promise<number> {
+      return this.authService.generateOtp();
+    }
+    
   
     @UseGuards(JwtAuthGuard)
     @Get('profile')
