@@ -29,6 +29,10 @@ export class UserService {
     return await this.userMstRepository.findOne({ where: "LOWER(user_name) = LOWER('" + userName + "')" });
   }
 
+  public async findByContactNumber(contactNo: string): Promise<UserMstEntity | null> {
+    return await this.userMstRepository.findOne({ where: "(contact_number) = ('" + contactNo + "')" });
+  }
+
   public async create(UserMstEntity: UserMstEntity): Promise<UserMstEntity> {
     return await this.userMstRepository.save(UserMstEntity);
   }

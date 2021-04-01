@@ -46,9 +46,16 @@ export class AuthService {
         return await this.validateUser(username, password);        
     }
 
-    async generateOtp() : Promise<number> {
-        const otp =  Math.floor(100000 + Math.random() * 900000);
-        return otp;        
+    async generateOtp(contactNo: string) : Promise<ResponseObject<{}>> {
+        const user = await this.usersService.findByContactNumber(contactNo);
+        if (user) {
+            const otp =  Math.floor(100000 + Math.random() * 900000);
+            let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+            let ro: ResponseObject<{}> = new ResponseObject(be, otp);
+            return ro;
+        }else{
+            throw new BusinessException(Constants.FAILURE_CODE, Constants.INVALID_CREDENTIALS);
+        }
     }
 
 }
