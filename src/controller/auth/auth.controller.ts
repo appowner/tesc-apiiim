@@ -18,7 +18,7 @@ export class AuthController {
       return this.authService.login(userName, password);
     }
 
-    @Get('getotp')
+    @Post('getotp')
     async getotp(@Body("contactNo") contactNo: string) : Promise<ResponseObject<{}>> {
       return this.authService.generateOtp(contactNo);
     }
