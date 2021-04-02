@@ -49,7 +49,7 @@ export class AuthService {
     async generateOtp(contactNo: string) : Promise<ResponseObject<{}>> {
         const user = await this.usersService.findByContactNumber(contactNo);
         if (user) {
-            const otp =  Math.floor(100000 + Math.random() * 900000);
+            const otp =  Math.floor(1000 + Math.random() * 9000);
             let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
             let ro: ResponseObject<{}> = new ResponseObject(be, otp);
             return ro;
