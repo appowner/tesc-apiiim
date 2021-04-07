@@ -15,6 +15,12 @@ import { UserMstEntity } from './entity/user-mst.entity';
 import { UserMstRepository } from './repository/user-mst-repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordEncryptionService } from './service/password-encryption/password-encryption.service';
+import { MailerModule, MailerService } from '@nestjs-modules/mailer';
+import { VendorEntity } from './entity/Vendor.entity';
+import { VendorRepository } from './repository/vendor-repository';
+import { VendorBankDetailEntity } from './entity/VendorBankDetail.entity';
+import { VendorContractEntity } from './entity/VendorContract.entity';
+import { VendorContractRouteEntity } from './entity/VendorContractRoute.entity';
 
 @Module({
     imports: [  
@@ -23,7 +29,9 @@ import { PasswordEncryptionService } from './service/password-encryption/passwor
         secret: jwtConstants.secret,
         signOptions: { expiresIn: '60m' },
       }),      
-      TypeOrmModule.forFeature([AddressEntity, UserMstEntity, UserMstRepository]),
+      TypeOrmModule.forFeature([AddressEntity, UserMstEntity, UserMstRepository,
+        VendorEntity,VendorRepository,VendorContractRouteEntity,
+        VendorBankDetailEntity,VendorContractEntity]),
     ],
     providers: [AuthService, UserService, LocalStrategy, JwtStrategy, PasswordEncryptionService],
     controllers: [LoginController, AuthController, UserController],

@@ -29,7 +29,7 @@ import {  AddressEntity } from './address.entity';
     contactNumber: string;
 
     @Column({name : "type"})
-    type: number;
+    type: string;
 
     @Column()
     active: boolean;

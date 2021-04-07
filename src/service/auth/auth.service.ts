@@ -8,6 +8,7 @@ import { AuthToken } from 'src/model/auth-token';
 import { ResponseObject } from 'src/model/response-object';
 import { BusinessError } from 'src/model/business-error';
 import { UserMstEntity } from 'src/entity/user-mst.entity';
+import { VendorRepository } from 'src/repository/vendor-repository';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,8 @@ export class AuthService {
     constructor(
         private usersService: UserService,
         private jwtService: JwtService,
-        private passwordEncryptionService : PasswordEncryptionService
+        private passwordEncryptionService : PasswordEncryptionService,
+        private vendorRepository : VendorRepository     
     ) {
 
     }
@@ -49,9 +51,17 @@ export class AuthService {
     async generateOtp(contactNo: string) : Promise<ResponseObject<{}>> {
         const user = await this.usersService.findByContactNumber(contactNo);
         if (user) {
+            // zelle
+            let map = {};
             const otp =  Math.floor(1000 + Math.random() * 9000);
+            map['otp'] = otp;
+            if(user.type === "VENDOR"){
+            let vendor = await this.vendorRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                map['vendorId'] = vendor.id;
+            }
+            
             let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
-            let ro: ResponseObject<{}> = new ResponseObject(be, otp);
+            let ro: ResponseObject<{}> = new ResponseObject(be, map);
             return ro;
         }else{
             throw new BusinessException(Constants.FAILURE_CODE, Constants.INVALID_CREDENTIALS);
