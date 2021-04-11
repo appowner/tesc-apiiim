@@ -9,6 +9,7 @@ import { ResponseObject } from 'src/model/response-object';
 import { BusinessError } from 'src/model/business-error';
 import { UserMstEntity } from 'src/entity/user-mst.entity';
 import { VendorRepository } from 'src/repository/vendor-repository';
+import { EmployeeRepository } from 'src/repository/employee.repository';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,8 @@ export class AuthService {
         private usersService: UserService,
         private jwtService: JwtService,
         private passwordEncryptionService : PasswordEncryptionService,
-        private vendorRepository : VendorRepository     
+        private vendorRepository : VendorRepository     ,
+        private employeeRepository : EmployeeRepository
     ) {
 
     }
@@ -59,6 +61,10 @@ export class AuthService {
             let vendor = await this.vendorRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
                 map['vendorId'] = vendor.id;
             }
+            if(user.type === "EMPLOYEE"){
+                let vendor = await this.employeeRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                    map['employeeId'] = vendor.id;
+                }
             
             let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
             let ro: ResponseObject<{}> = new ResponseObject(be, map);
