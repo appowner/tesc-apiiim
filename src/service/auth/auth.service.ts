@@ -10,6 +10,7 @@ import { BusinessError } from 'src/model/business-error';
 import { UserMstEntity } from 'src/entity/user-mst.entity';
 import { VendorRepository } from 'src/repository/vendor-repository';
 import { EmployeeRepository } from 'src/repository/employee.repository';
+import { DriverRepository } from 'src/repository/driver-repository';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,8 @@ export class AuthService {
         private jwtService: JwtService,
         private passwordEncryptionService : PasswordEncryptionService,
         private vendorRepository : VendorRepository     ,
-        private employeeRepository : EmployeeRepository
+        private employeeRepository : EmployeeRepository,
+        private driverRepository : DriverRepository
     ) {
 
     }
@@ -60,11 +62,13 @@ export class AuthService {
             if(user.type === "VENDOR"){
             let vendor = await this.vendorRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
                 map['vendorId'] = vendor.id;
+            } else if(user.type === "EMPLOYEE"){
+                let employee = await this.employeeRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                    map['employeeId'] = employee.id;
+            } else if(user.type === "DRIVER"){
+                let driver = await this.driverRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                    map['driverId'] = driver.id;
             }
-            if(user.type === "EMPLOYEE"){
-                let vendor = await this.employeeRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
-                    map['employeeId'] = vendor.id;
-                }
             
             let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
             let ro: ResponseObject<{}> = new ResponseObject(be, map);
