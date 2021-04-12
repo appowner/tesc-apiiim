@@ -59,6 +59,7 @@ export class AuthService {
             let map = {};
             const otp =  Math.floor(1000 + Math.random() * 9000);
             map['otp'] = otp;
+            map['type'] = user.type;
             if(user.type === "VENDOR"){
             let vendor = await this.vendorRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
                 map['vendorId'] = vendor.id;
