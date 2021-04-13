@@ -11,6 +11,7 @@ import { UserMstEntity } from 'src/entity/user-mst.entity';
 import { VendorRepository } from 'src/repository/vendor-repository';
 import { EmployeeRepository } from 'src/repository/employee.repository';
 import { DriverRepository } from 'src/repository/driver-repository';
+import { CustomerRepository } from 'src/repository/customer-repository';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,8 @@ export class AuthService {
         private passwordEncryptionService : PasswordEncryptionService,
         private vendorRepository : VendorRepository     ,
         private employeeRepository : EmployeeRepository,
-        private driverRepository : DriverRepository
+        private driverRepository : DriverRepository,
+        private customerRepository : CustomerRepository
     ) {
 
     }
@@ -35,6 +37,11 @@ export class AuthService {
             map["token"] =  new AuthToken(this.jwtService.sign(payload));
             user.password = "";
             map["user"] = user;
+            
+            if(user.type === "CUSTOMER"){
+            let customer = await this.customerRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                map['customerId'] = customer.id;
+            } 
             let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
             let ro: ResponseObject<{}> = new ResponseObject(be, map);
            

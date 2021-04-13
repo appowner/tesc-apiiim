@@ -25,6 +25,10 @@ import { EmployeeEntity } from './entity/Employee.entity';
 import { EmployeeRepository } from './repository/employee.repository';
 import { DriverEntity } from './entity/Driver.entity';
 import { DriverRepository } from './repository/driver-repository';
+import { CustomerEntity } from './entity/Customer.entity';
+import { CustomerContractEntity } from './entity/CustomerContract.entity';
+import { CustomerContractRouteEntity } from './entity/CustomerContractRoute.entity';
+import { CustomerRepository } from './repository/customer-repository';
 
 @Module({
     imports: [  
@@ -35,7 +39,8 @@ import { DriverRepository } from './repository/driver-repository';
       }),      
       TypeOrmModule.forFeature([AddressEntity, UserMstEntity, UserMstRepository,
         VendorEntity,VendorRepository,VendorContractRouteEntity,
-        VendorBankDetailEntity,VendorContractEntity,EmployeeEntity,EmployeeRepository, DriverEntity,DriverRepository]),
+        VendorBankDetailEntity,VendorContractEntity,EmployeeEntity,EmployeeRepository, DriverEntity,DriverRepository,
+      CustomerEntity,CustomerContractEntity,CustomerContractRouteEntity,CustomerRepository]),
     ],
     providers: [AuthService, UserService, LocalStrategy, JwtStrategy, PasswordEncryptionService],
     controllers: [LoginController, AuthController, UserController],
