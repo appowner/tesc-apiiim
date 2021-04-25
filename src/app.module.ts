@@ -5,9 +5,9 @@ import { AppService } from './app.service';
 import {ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { AddressEntity } from './entity/address.entity';
-import { UserMstEntity } from './entity/user-mst.entity';
+
 import { CommonModule } from './common.module';
+import { RestCallService } from './service/rest-call/rest-call.service';
 
 
 @Module({

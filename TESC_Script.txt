@@ -141,10 +141,11 @@ CREATE SEQUENCE user_mst_sequence
   address_id            bigint              NOT NULL,
   email             varchar(100)         NOT NULL,
   contact_number        varchar(15)          NOT NULL,
-  type                  int              NOT NULL,
+  type                  varchar(100)              NOT NULL,
   otp                   int               NOT NULL,
   otp_time               timestamp,
   active		         boolean    default false,
+  forgot_pass_token		varchar(100)              NOT NULL,
  
   PRIMARY KEY (id),
   CONSTRAINT user_mst_address_fk FOREIGN KEY (address_id) REFERENCES address (id)

@@ -8,5 +8,6 @@ export class ResponseObject<T> {
     }
 
     businessError : BusinessError;
+    refreshToken : string;
     res : T;
 }

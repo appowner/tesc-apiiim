@@ -4,7 +4,7 @@ import { UserMstEntity } from 'src/entity/user-mst.entity';
 import { CustomGLobalExceptionHandler } from 'src/CustomGLobalExceptionHandler';
 import { ResponseObject } from 'src/model/response-object';
 import { BusinessError } from 'src/model/business-error';
-import { Constants } from 'src/common/constants';
+import { Constants } from 'src/model/constants';
 
 @Controller('user')
 @UseFilters(new CustomGLobalExceptionHandler())

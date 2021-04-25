@@ -7,8 +7,8 @@ export class PasswordEncryptionService {
         console.log("encrypt-:"+ this.encrypt("tesc@admin@108"));
         console.log("decrypt-:"+ this.decrypt(this.encrypt("tesc@admin@108")));
    
-        console.log("encrypt-:"+ this.encrypt("password"));
-        console.log("decrypt-:"+ this.decrypt(this.encrypt("password")));
+        console.log("encrypt-:"+ this.encrypt("changePassword"));
+        console.log("decrypt-:"+ this.decrypt(this.encrypt("changePassword")));
        }
    
         decrypt = (encrypted: string) => {

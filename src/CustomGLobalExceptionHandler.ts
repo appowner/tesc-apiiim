@@ -2,7 +2,8 @@ import { Catch, ArgumentsHost, Inject, HttpServer, HttpStatus, HttpException } f
 import { BaseExceptionFilter } from '@nestjs/core';
 import { BusinessException } from 'src/model/business-exception';
 import { BusinessError } from 'src/model/business-error';
-import { Constants } from './common/constants';
+import { Constants } from './model/constants';
+import { ResponseObject } from './model/response-object';
 
 
 
@@ -37,9 +38,9 @@ export class CustomGLobalExceptionHandler extends BaseExceptionFilter {
       message.message = Constants.FAILURE_RES;
     }
 
-
+    let ro = new ResponseObject(message, null);
     response
       .status(status)
-      .json(message);
+      .json(ro);
   }
 }
