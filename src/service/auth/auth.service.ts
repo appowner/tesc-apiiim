@@ -7,9 +7,9 @@ import { BusinessException } from 'src/model/business-exception';
 import { AuthToken } from 'src/auth/auth-token';
 import { ResponseObject } from 'src/model/response-object';
 import { BusinessError } from 'src/model/business-error';
-import { VendorRepository } from 'src/repository/vendor-repository';
-import { EmployeeRepository } from 'src/repository/employee.repository';
-import { DriverRepository } from 'src/repository/driver-repository';
+// import { VendorRepository } from 'src/repository/vendor-repository';
+// import { EmployeeRepository } from 'src/repository/employee.repository';
+// import { DriverRepository } from 'src/repository/driver-repository';
 import { RestCallService } from '../rest-call/rest-call.service';
 
 @Injectable()
@@ -19,9 +19,6 @@ export class AuthService {
         private usersService: UserService,
         private jwtService: JwtService,
         private passwordEncryptionService: PasswordEncryptionService,
-        private vendorRepository: VendorRepository,
-        private employeeRepository: EmployeeRepository,
-        private driverRepository: DriverRepository,
         private restCallService: RestCallService
     ) {
 
@@ -82,14 +79,18 @@ export class AuthService {
             const otp = Math.floor(1000 + Math.random() * 9000);
             map['otp'] = otp;
             map['type'] = user.type;
+
             if (user.type === "VENDOR") {
-                let vendor = await this.vendorRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                //  let vendor = await this.vendorRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                let vendor = await this.restCallService.findVendorByUserId(user.id);
                 map['vendorId'] = vendor.id;
             } else if (user.type === "EMPLOYEE") {
-                let employee = await this.employeeRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                //  let employee = await this.employeeRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                let employee = await this.restCallService.findEmployeeByUserId(user.id);
                 map['employeeId'] = employee.id;
             } else if (user.type === "DRIVER") {
-                let driver = await this.driverRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                // let driver = await this.driverRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                let driver = await this.restCallService.findDriverByUserId(user.id);
                 map['driverId'] = driver.id;
             }
 

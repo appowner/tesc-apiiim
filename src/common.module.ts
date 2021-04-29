@@ -41,10 +41,10 @@ import { RouterConfigRepository } from './repository/router.config.repository';
       JwtModule.register({
         secret: jwtConstants.secret,
         signOptions: { expiresIn: '60m' },
-      }),      
+      }),
+      // VendorEntity,VendorRepository,VendorContractRouteEntity,
+      // VendorBankDetailEntity,VendorContractEntity,EmployeeEntity,EmployeeRepository, DriverEntity,DriverRepository,      
       TypeOrmModule.forFeature([AddressEntity, UserMstEntity, UserMstRepository,
-        VendorEntity,VendorRepository,VendorContractRouteEntity,
-        VendorBankDetailEntity,VendorContractEntity,EmployeeEntity,EmployeeRepository, DriverEntity,DriverRepository,
        RouterConfigRepository]),
       HttpModule
     ],
