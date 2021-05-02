@@ -19,8 +19,8 @@ export class RestCallService {
         })
     }
 
-    async findCustomerByUserId(id: number): Promise<CustomerEntity> {
-        let res: AxiosResponse<ResponseObject<CustomerEntity>> = await this.httpService.get<ResponseObject<CustomerEntity>>(this.redirectMap.get('customer') + 'customer/findByUserId?id=' + id).toPromise();
+    async findCustomerByUserId(token : string, id: number): Promise<CustomerEntity> {
+        let res: AxiosResponse<ResponseObject<CustomerEntity>> = await this.httpService.get<ResponseObject<CustomerEntity>>('http://localhost:35002/router/v1/customer/findByUserId?id=' + id, {headers : {authorization : 'Bearer '+token}}).toPromise();
         return res.data.res;
     }
 
