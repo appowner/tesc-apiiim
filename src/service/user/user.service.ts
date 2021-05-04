@@ -43,6 +43,10 @@ export class UserService {
     return await this.userMstRepository.save(UserMstEntity);
   }
 
+  public async saveOTP(UserMstEntity: UserMstEntity): Promise<UserMstEntity> {
+    return await this.userMstRepository.save(UserMstEntity);
+  }
+
   public async update(
     id: number,
     newValue: UserMstEntity,

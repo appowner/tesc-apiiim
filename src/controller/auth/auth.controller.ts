@@ -15,9 +15,10 @@ export class AuthController {
 
   // @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body("userName") userName: string, @Body("password") password: string): Promise<ResponseObject<{}>> {
-    return this.authService.login(userName, password);
+  async login(@Body("userName") userName: string, @Body("password") password: string, @Body("otp") otp: string): Promise<ResponseObject<{}>> {
+    return this.authService.login(userName, password,otp);
   }
+
 
   @Post('forgotPassword')
   async forgotPassword(@Body("email") email: string): Promise<ResponseObject<{}>> {

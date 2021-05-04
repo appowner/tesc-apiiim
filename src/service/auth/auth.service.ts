@@ -50,10 +50,36 @@ export class AuthService {
 
     }
 
+    async validateOtp(username: string, otp: string): Promise<ResponseObject<{}>> {
+        const user = await this.usersService.findByContactNumber(username);
+        if (user && user.otp == otp) {
+            const payload = { userName: user.userName, sub: user.id };
+            let map = {};
+            map["token"] = new AuthToken(this.jwtService.sign(payload));
+            user.password = "";
+            map["user"] = user;
 
+            if (user.type === "CUSTOMER") {
+                // let customer = await this.customerRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
+                let customer = await this.restCallService.findCustomerByUserId(user.id);
+                map['customerId'] = customer.id;
+            }
+            let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+            let ro: ResponseObject<{}> = new ResponseObject(be, map);
+            return ro;
+        } else {
+            throw new BusinessException(Constants.FAILURE_CODE, Constants.INVALID_CREDENTIALS);
+        }
 
-    async login(username: string, password: string): Promise<ResponseObject<{}>> {
-        return await this.validateUser(username, password);
+    }
+
+    async login(username: string, password: string, otp: string): Promise<ResponseObject<{}>> {
+        if(username && password){
+            return await this.validateUser(username, password);
+        } else if(username && otp){
+            return await this.validateOtp(username, otp);
+        }
+        
     }
 
     validateToken(token: string, payloadReq: any): ResponseObject<{}> {
@@ -76,7 +102,7 @@ export class AuthService {
         if (user) {
             // zelle
             let map = {};
-            const otp = Math.floor(1000 + Math.random() * 9000);
+            let otp = Math.floor(1000 + Math.random() * 9000);
             map['otp'] = otp;
             map['type'] = user.type;
 
@@ -94,6 +120,9 @@ export class AuthService {
                 map['driverId'] = driver.id;
             }
 
+            user.otp = otp.toString();
+            user.otpTime = new Date(Date.now());
+            await this.usersService.saveOTP(user);
             let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
             let ro: ResponseObject<{}> = new ResponseObject(be, map);
             return ro;
