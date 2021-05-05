@@ -24,18 +24,18 @@ export class RestCallService {
         return res.data.res;
     }
 
-    async findVendorByUserId(id: number): Promise<VendorEntity> {
-        let res: AxiosResponse<ResponseObject<VendorEntity>> = await this.httpService.get<ResponseObject<VendorEntity>>(process.env.ROUTER_URL + 'vendor/findByUserId?id=' + id).toPromise();
+    async findVendorByUserId(token : string, id: number): Promise<VendorEntity> {
+        let res: AxiosResponse<ResponseObject<VendorEntity>> = await this.httpService.get<ResponseObject<VendorEntity>>(process.env.ROUTER_URL + 'vendor/findByUserId?id=' + id, {headers : {authorization : 'Bearer '+token}}).toPromise();
         return res.data.res;
     }
 
-    async findDriverByUserId(id: number): Promise<DriverEntity> {
-        let res: AxiosResponse<ResponseObject<DriverEntity>> = await this.httpService.get<ResponseObject<DriverEntity>>(process.env.ROUTER_URL + 'driver/findByUserId?id=' + id).toPromise();
+    async findDriverByUserId(token : string, id: number): Promise<DriverEntity> {
+        let res: AxiosResponse<ResponseObject<DriverEntity>> = await this.httpService.get<ResponseObject<DriverEntity>>(process.env.ROUTER_URL + 'driver/findByUserId?id=' + id, {headers : {authorization : 'Bearer '+token}}).toPromise();
         return res.data.res;
     }
 
-    async findEmployeeByUserId(id: number): Promise<EmployeeEntity> {
-        let res: AxiosResponse<ResponseObject<EmployeeEntity>> = await this.httpService.get<ResponseObject<EmployeeEntity>>(process.env.ROUTER_URL + 'employee/findByUserId?id=' + id).toPromise();
+    async findEmployeeByUserId(token : string, id: number): Promise<EmployeeEntity> {
+        let res: AxiosResponse<ResponseObject<EmployeeEntity>> = await this.httpService.get<ResponseObject<EmployeeEntity>>(process.env.ROUTER_URL + 'employee/findByUserId?id=' + id, {headers : {authorization : 'Bearer '+token}}).toPromise();
         return res.data.res;
     }
 

@@ -102,21 +102,23 @@ export class AuthService {
         if (user) {
             // zelle
             let map = {};
+            const payload = { userName: user.userName, sub: user.id };            
+            map["token"] = new AuthToken(this.jwtService.sign(payload));
             let otp = Math.floor(1000 + Math.random() * 9000);
             map['otp'] = otp;
             map['type'] = user.type;
 
             if (user.type === "VENDOR") {
                 //  let vendor = await this.vendorRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
-                let vendor = await this.restCallService.findVendorByUserId(user.id);
+                let vendor = await this.restCallService.findVendorByUserId(map["token"].token, user.id);
                 map['vendorId'] = vendor.id;
             } else if (user.type === "EMPLOYEE") {
                 //  let employee = await this.employeeRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
-                let employee = await this.restCallService.findEmployeeByUserId(user.id);
+                let employee = await this.restCallService.findEmployeeByUserId(map["token"].token, user.id);
                 map['employeeId'] = employee.id;
             } else if (user.type === "DRIVER") {
                 // let driver = await this.driverRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
-                let driver = await this.restCallService.findDriverByUserId(user.id);
+                let driver = await this.restCallService.findDriverByUserId(map["token"].token, user.id);
                 map['driverId'] = driver.id;
             }
 

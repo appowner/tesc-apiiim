@@ -38,7 +38,7 @@ export class AuthController {
   }
 
   @Post('getotp')
-  async getotp(@Body("contactNo") contactNo: string): Promise<ResponseObject<{}>> {
+  async getotp(@Body("contactNo") contactNo: string, @Req() req): Promise<ResponseObject<{}>> {
     return this.authService.generateOtp(contactNo);
   }
 
