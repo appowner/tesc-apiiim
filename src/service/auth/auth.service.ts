@@ -61,7 +61,7 @@ export class AuthService {
 
             if (user.type === "CUSTOMER") {
                 // let customer = await this.customerRepository.findOne({ where: "(user_mst_id) = ('" + user.id + "')" });
-                let customer = await this.restCallService.findCustomerByUserId(user.id);
+                let customer = await this.restCallService.findCustomerByUserId(map["token"].token,user.id);
                 map['customerId'] = customer.id;
             }
             let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
