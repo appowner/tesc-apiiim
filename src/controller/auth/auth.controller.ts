@@ -25,9 +25,9 @@ export class AuthController {
     return this.authService.forgotPasswordLinkGenerate(email);
   }
 
-  @Post('changePassword')
+  @Post('forgotUpdatePassword')
   async changePassword(@Body("token") token: string, @Body("oldPassword") oldPassword: string, @Body("newPassword") newPassword): Promise<ResponseObject<{}>> {
-    return this.authService.changePassword(token, oldPassword, newPassword);
+    return this.authService.forgotUpdatePassword(token, oldPassword, newPassword);
   }
 
   @Post('validateToken')

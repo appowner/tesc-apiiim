@@ -84,7 +84,7 @@ export class UserService {
 
   }
 
-  public async changePassword(token: string, oldPassword: string, newPassword) {
+  public async forgotUpdatePassword(token: string, oldPassword: string, newPassword) {
     let users = await this.userMstRepository.find({
       where: { forgotPassToken: token }
     });
@@ -97,9 +97,9 @@ export class UserService {
       throw new BusinessException(Constants.FAILURE_CODE, "Forgot password token expired");
     }
 
-    if (this.passwordEncryptionService.decrypt(users[0].password) != oldPassword) {
-      throw new BusinessException(Constants.FAILURE_CODE, "Invalid passowrd");
-    }
+    // if (this.passwordEncryptionService.decrypt(users[0].password) != oldPassword) {
+    //   throw new BusinessException(Constants.FAILURE_CODE, "Invalid passowrd");
+    // }
 
     console.log(newPassword+"encrypted password-:"+this.passwordEncryptionService.encrypt(newPassword));
     await this.userMstRepository.createQueryBuilder("user")

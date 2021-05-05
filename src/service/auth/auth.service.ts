@@ -143,8 +143,8 @@ export class AuthService {
         return ro;
     }
 
-    async changePassword(token: string, oldPassword: string, newPassword): Promise<ResponseObject<{}>> {
-        await this.usersService.changePassword(token, oldPassword, newPassword);
+    async forgotUpdatePassword(token: string, oldPassword: string, newPassword): Promise<ResponseObject<{}>> {
+        await this.usersService.forgotUpdatePassword(token, oldPassword, newPassword);
         let ro = new ResponseObject(new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES), {});
         return ro;
     }

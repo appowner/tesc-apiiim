@@ -20,22 +20,22 @@ export class RestCallService {
     }
 
     async findCustomerByUserId(token : string, id: number): Promise<CustomerEntity> {
-        let res: AxiosResponse<ResponseObject<CustomerEntity>> = await this.httpService.get<ResponseObject<CustomerEntity>>('http://localhost:35002/router/v1/customer/findByUserId?id=' + id, {headers : {authorization : 'Bearer '+token}}).toPromise();
+        let res: AxiosResponse<ResponseObject<CustomerEntity>> = await this.httpService.get<ResponseObject<CustomerEntity>>(process.env.ROUTER_URL + 'customer/findByUserId?id=' + id, {headers : {authorization : 'Bearer '+token}}).toPromise();
         return res.data.res;
     }
 
     async findVendorByUserId(id: number): Promise<VendorEntity> {
-        let res: AxiosResponse<ResponseObject<VendorEntity>> = await this.httpService.get<ResponseObject<VendorEntity>>(this.redirectMap.get('vendor') + 'vendor/findByUserId?id=' + id).toPromise();
+        let res: AxiosResponse<ResponseObject<VendorEntity>> = await this.httpService.get<ResponseObject<VendorEntity>>(process.env.ROUTER_URL + 'vendor/findByUserId?id=' + id).toPromise();
         return res.data.res;
     }
 
     async findDriverByUserId(id: number): Promise<DriverEntity> {
-        let res: AxiosResponse<ResponseObject<DriverEntity>> = await this.httpService.get<ResponseObject<DriverEntity>>(this.redirectMap.get('driver') + 'driver/findByUserId?id=' + id).toPromise();
+        let res: AxiosResponse<ResponseObject<DriverEntity>> = await this.httpService.get<ResponseObject<DriverEntity>>(process.env.ROUTER_URL + 'driver/findByUserId?id=' + id).toPromise();
         return res.data.res;
     }
 
     async findEmployeeByUserId(id: number): Promise<EmployeeEntity> {
-        let res: AxiosResponse<ResponseObject<EmployeeEntity>> = await this.httpService.get<ResponseObject<EmployeeEntity>>(this.redirectMap.get('employee') + 'employee/findByUserId?id=' + id).toPromise();
+        let res: AxiosResponse<ResponseObject<EmployeeEntity>> = await this.httpService.get<ResponseObject<EmployeeEntity>>(process.env.ROUTER_URL + 'employee/findByUserId?id=' + id).toPromise();
         return res.data.res;
     }
 
