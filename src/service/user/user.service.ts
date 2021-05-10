@@ -8,6 +8,8 @@ import { Constants } from 'src/model/constants';
 import * as CryptoJS from 'crypto-js';
 import * as moment from 'moment';
 import { PasswordEncryptionService } from 'src/auth/password-encryption/password-encryption.service';
+import { RestCallService } from '../rest-call/rest-call.service';
+import { Request } from 'express';
 
 // This should be a real class/interface representing a user entity
 export type User = any;
@@ -15,7 +17,8 @@ export type User = any;
 @Injectable()
 export class UserService {
 
-  constructor(private userMstRepository: UserMstRepository, private passwordEncryptionService: PasswordEncryptionService) {
+  constructor(private userMstRepository: UserMstRepository, private passwordEncryptionService: PasswordEncryptionService,
+    private restCallService: RestCallService) {
   }
 
 
@@ -64,7 +67,7 @@ export class UserService {
     return await this.userMstRepository.delete(id);
   }
 
-  public async forgotPasswordLinkGenerate(email: string): Promise<string> {
+  public async forgotPasswordLinkGenerate(req: Request, email: string): Promise<string> {
 
     let users = await this.userMstRepository.find({ where: { email: email } });
 
@@ -79,6 +82,17 @@ export class UserService {
       .set({ forgotPassToken: token, forgotPassTokenExp: moment(expireDate).format('YYYY-MM-DD hh:mm') })
       .where({ id: users[0].id })
       .execute()
+    // http://operations.dev.tesc.cloud/ - Admin Portal
+    http://customers.dev.tesc.cloud/ - Customer Portal
+    if (users[0].type === "CUSTOMER") {
+      let mail = [];
+      mail.push(email);
+      await this.restCallService.sendMail(req, mail, "Forgot Password", "http://customers.dev.tesc.cloud/forgotPassword?q=" + token);
+    } else {
+
+      throw new BusinessException(Constants.FAILURE_CODE, "Forgot password not implemented for user type-:" + users[0].type)
+    }
+
 
     return "?q=" + token;
 
@@ -101,7 +115,7 @@ export class UserService {
     //   throw new BusinessException(Constants.FAILURE_CODE, "Invalid passowrd");
     // }
 
-    console.log(newPassword+"encrypted password-:"+this.passwordEncryptionService.encrypt(newPassword));
+    console.log(newPassword + "encrypted password-:" + this.passwordEncryptionService.encrypt(newPassword));
     await this.userMstRepository.createQueryBuilder("user")
       .update()
       .set({ forgotPassToken: null, forgotPassTokenExp: null, password: this.passwordEncryptionService.encrypt(newPassword) })

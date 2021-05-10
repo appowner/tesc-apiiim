@@ -21,8 +21,8 @@ export class AuthController {
 
 
   @Post('forgotPassword')
-  async forgotPassword(@Body("email") email: string): Promise<ResponseObject<{}>> {
-    return this.authService.forgotPasswordLinkGenerate(email);
+  async forgotPassword(@Req() req,  @Body("email") email: string): Promise<ResponseObject<{}>> {
+    return this.authService.forgotPasswordLinkGenerate(req, email);
   }
 
   @Post('forgotUpdatePassword')

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Req } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { PasswordEncryptionService } from '../../auth/password-encryption/password-encryption.service';
@@ -133,8 +133,9 @@ export class AuthService {
         }
     }
 
-    async forgotPasswordLinkGenerate(email: string): Promise<ResponseObject<{}>> {
-        let url = await this.usersService.forgotPasswordLinkGenerate(email);
+    async forgotPasswordLinkGenerate(req, email: string): Promise<ResponseObject<{}>> {
+        
+        let url = await this.usersService.forgotPasswordLinkGenerate(req, email);
         let ro = new ResponseObject(new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES), { link: url })
         return ro;
     }
