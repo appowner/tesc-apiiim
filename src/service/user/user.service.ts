@@ -87,7 +87,7 @@ export class UserService {
     if (users[0].type === "CUSTOMER") {
       let mail = [];
       mail.push(email);
-      await this.restCallService.sendMail(req, mail, "Forgot Password", "http://customers.dev.tesc.cloud/forgotPassword?q=" + token);
+      await this.restCallService.sendMail(req, mail, "Forgot Password", process.env.CUSTOMER_FORGOT_PASSWORD_URL + token);
     } else {
 
       throw new BusinessException(Constants.FAILURE_CODE, "Forgot password not implemented for user type-:" + users[0].type)
