@@ -34,6 +34,12 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import { PasswordEncryptionService } from './auth/password-encryption/password-encryption.service';
 import { RestCallService } from './service/rest-call/rest-call.service';
 import { RouterConfigRepository } from './repository/router.config.repository';
+import { PersonRepository } from './repository/person-repository';
+import { PersonEntity } from './entity/Person.entity';
+import { PersonMobileMasterRepository } from './repository/person-mobile-master-repository';
+import { PersonMobileMasterEntity } from './entity/person-mobile-master.entity';
+import { EmailMasterEntity } from './entity/email-master.entity';
+import { EmailMasterRepository } from './repository/email-master-repository';
 
 @Module({
     imports: [  
@@ -44,7 +50,8 @@ import { RouterConfigRepository } from './repository/router.config.repository';
       }),
       // VendorEntity,VendorRepository,VendorContractRouteEntity,
       // VendorBankDetailEntity,VendorContractEntity,EmployeeEntity,EmployeeRepository, DriverEntity,DriverRepository,      
-      TypeOrmModule.forFeature([AddressEntity, UserMstEntity, UserMstRepository,
+      TypeOrmModule.forFeature([AddressEntity, UserMstEntity, UserMstRepository,PersonRepository, PersonEntity,
+        PersonMobileMasterRepository,PersonMobileMasterEntity,EmailMasterEntity,EmailMasterRepository,
        RouterConfigRepository]),
       HttpModule
     ],
