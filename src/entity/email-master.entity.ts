@@ -1,6 +1,6 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
-@Index("email_master_pkey", ["id"], { unique: true })
+@Index("email_master_pkey", ["EmailMasterId"], { unique: true })
 @Entity("email_master", { schema: "public" })
 export class EmailMasterEntity {
   @PrimaryGeneratedColumn({ type: "bigint", name: "email_master_id" })

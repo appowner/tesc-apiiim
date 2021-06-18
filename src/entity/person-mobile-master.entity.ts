@@ -1,6 +1,6 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
-@Index("person_mobile_master_pkey", ["id"], { unique: true })
+@Index("person_mobile_master_pkey", ["MobileMasterId"], { unique: true })
 @Entity("person_mobile_master", { schema: "public" })
 export class PersonMobileMasterEntity {
   @PrimaryGeneratedColumn({ type: "bigint", name: "mobile_master_id" })
