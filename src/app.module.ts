@@ -37,7 +37,7 @@ import { PersonController } from './controller/person/person.controller';
     
     CommonModule,
   ],
-  controllers: [AppController, PersonController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

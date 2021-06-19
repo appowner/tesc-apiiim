@@ -40,6 +40,8 @@ import { PersonMobileMasterRepository } from './repository/person-mobile-master-
 import { PersonMobileMasterEntity } from './entity/person-mobile-master.entity';
 import { EmailMasterEntity } from './entity/email-master.entity';
 import { EmailMasterRepository } from './repository/email-master-repository';
+import { PersonController } from './controller/person/person.controller';
+import { PersonService } from './service/person/person.service';
 
 @Module({
     imports: [  
@@ -55,8 +57,8 @@ import { EmailMasterRepository } from './repository/email-master-repository';
        RouterConfigRepository]),
       HttpModule
     ],
-    providers: [AuthService, UserService, LocalStrategy, JwtStrategy, PasswordEncryptionService, RestCallService],
-    controllers: [LoginController, AuthController, UserController],
+    providers: [AuthService, UserService, LocalStrategy, JwtStrategy,PersonService, PasswordEncryptionService, RestCallService],
+    controllers: [LoginController, AuthController, UserController,PersonController],
     
     exports: [AuthService]
   })
