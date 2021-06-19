@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { CommonModule } from './common.module';
 import { RestCallService } from './service/rest-call/rest-call.service';
+import { PersonController } from './controller/person/person.controller';
 
 
 @Module({
@@ -36,7 +37,7 @@ import { RestCallService } from './service/rest-call/rest-call.service';
     
     CommonModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, PersonController],
   providers: [AppService],
 })
 export class AppModule {}
