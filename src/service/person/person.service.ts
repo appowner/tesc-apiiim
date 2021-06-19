@@ -34,7 +34,15 @@ export class PersonService {
 
 
   public async findById(req: Request,id: number): Promise<PersonEntity | null> {
-    return await this.personRepository.findOneOrFail(id);
+    let person = await this.personRepository.findOneOrFail(id);
+    let res = await Promise.all([
+      this.getEmailMasterByPersonId(req, person.id),
+      this.getMobileMasterByPersonId(req,person.id)
+  ]);
+
+    person.emailMasterObj = res[0];
+    person.mobileMasterObj = res[1];
+    return person;
   }
 
   public async findByRefId(req: Request,refId: number): Promise<PersonEntity | null> {
@@ -42,7 +50,15 @@ export class PersonService {
   }
 
   public async findByRefIdAndRefType(req: Request,refId: number,refType:string): Promise<PersonEntity | null> {
-    return await this.personRepository.findOneOrFail({ where: "ref_id = '" + refId + "' and ref_type = '" + refType + "'" });
+    let person = await this.personRepository.findOneOrFail({ where: "ref_id = '" + refId + "' and ref_type = '" + refType + "'" });
+    let res = await Promise.all([
+      this.getEmailMasterByPersonId(req, person.id),
+      this.getMobileMasterByPersonId(req,person.id)
+  ]);
+
+    person.emailMasterObj = res[0];
+    person.mobileMasterObj = res[1];
+    return person;
   }
 
   public async findByRefType(req: Request,refType:string): Promise<PersonEntity[] | null> {

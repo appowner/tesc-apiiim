@@ -1,4 +1,6 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { EmailMasterEntity } from "./email-master.entity";
+import { PersonMobileMasterEntity } from "./person-mobile-master.entity";
 
 @Index("person_pkey", ["id"], { unique: true })
 @Entity("person", { schema: "public" })
@@ -38,4 +40,8 @@ export class PersonEntity {
   mobileNo: string | null;
 
   email: string | null;
+
+  emailMasterObj: EmailMasterEntity;
+
+  mobileMasterObj: PersonMobileMasterEntity;
 }
