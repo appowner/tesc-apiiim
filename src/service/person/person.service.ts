@@ -38,7 +38,7 @@ export class PersonService {
   }
 
   public async findByRefId(req: Request,refId: number): Promise<PersonEntity | null> {
-    return await this.personRepository.findOneOrFail({ where: "refId = '" + refId + "'" });
+    return await this.personRepository.findOneOrFail({ where: "ref_id = '" + refId + "'" });
   }
 
   public async findByRefIdAndRefType(req: Request,refId: number,refType:string): Promise<PersonEntity | null> {
@@ -46,7 +46,7 @@ export class PersonService {
   }
 
   public async findByRefType(req: Request,refType:string): Promise<PersonEntity[] | null> {
-    return await this.personRepository.find({ where: "refType = '" + refType + "'" });
+    return await this.personRepository.find({ where: "ref_type = '" + refType + "'" });
   }
 
   public async findByName(req: Request,name: string): Promise<PersonEntity | null> {
