@@ -42,7 +42,7 @@ export class PersonService {
   }
 
   public async findByRefIdAndRefType(req: Request,refId: number,refType:string): Promise<PersonEntity | null> {
-    return await this.personRepository.findOneOrFail({ where: "refId = '" + refId + "' and refType = '" + refType + "'" });
+    return await this.personRepository.findOneOrFail({ where: "ref_id = '" + refId + "' and ref_type = '" + refType + "'" });
   }
 
   public async findByRefType(req: Request,refType:string): Promise<PersonEntity[] | null> {
