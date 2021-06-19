@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Post, Body, Req, UseFilters } from '@nestjs/common';
+import { Controller, Get, Query, Post, Body, Req, UseFilters, Delete } from '@nestjs/common';
 import { UserService } from 'src/service/user/user.service';
 import { UserMstEntity } from 'src/entity/user-mst.entity';
 import { CustomGLobalExceptionHandler } from 'src/CustomGLobalExceptionHandler';
@@ -92,6 +92,13 @@ export class PersonController {
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
       let ro: ResponseObject<PersonMobileMasterEntity> = new ResponseObject(be, await this.personService.getMobileMasterByPersonId(req,personId))
       return ro;
+    }
+
+    @Delete("/delete")
+    async delete(@Req() req,@Query('id') id: number): Promise<BusinessError> {
+      await this.personService.delete(req,id);
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      return be;
     }
 
 }

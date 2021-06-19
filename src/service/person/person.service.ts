@@ -100,8 +100,8 @@ export class PersonService {
     newValue: PersonEntity,
   ): Promise<PersonEntity | null> {
     const personEntity = await this.personRepository.findOneOrFail(id);
-    const personMobileMasterEntity = await this.personMobileMasterRepository.findOneOrFail({ where: "personId = '" + id + "'" });
-    const emailMasterEntity = await this.emailMasterRepository.findOneOrFail({ where: "personId = '" + id + "'" });
+    const personMobileMasterEntity = await this.personMobileMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
+    const emailMasterEntity = await this.emailMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
     if (!personEntity.id) {
       console.error("PersonEntity doesn't exist");
     }
