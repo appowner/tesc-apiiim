@@ -139,14 +139,14 @@ export class PersonService {
   }
 
   public async getEmailMasterByPersonId(req: Request,personId: number): Promise<EmailMasterEntity | null> {
-    return await this.emailMasterRepository.findOneOrFail({ where: "personId = '" + personId + "'" });
+    return await this.emailMasterRepository.findOneOrFail({ where: "person_id = '" + personId + "'" });
   }
 
   public async findByMobileNo(req: Request,mobileNo: string): Promise<PersonMobileMasterEntity | null> {
-    return await this.personMobileMasterRepository.findOneOrFail({ where: "mobileNo = '" + mobileNo + "'" });
+    return await this.personMobileMasterRepository.findOneOrFail({ where: "mobile_no = '" + mobileNo + "'" });
   }
 
   public async getMobileMasterByPersonId(req: Request,personId: number): Promise<PersonMobileMasterEntity | null> {
-    return await this.personMobileMasterRepository.findOneOrFail({ where: "personId = '" + personId + "'" });
+    return await this.personMobileMasterRepository.findOneOrFail({ where: "person_id = '" + personId + "'" });
   }
 }
