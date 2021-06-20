@@ -37,6 +37,15 @@ export class PersonEntity {
   @Column("bigint", { name: "ref_user_id"})
   refUserId: number | null;
 
+  @Column("boolean", { name: "is_deleted", nullable: true, default: () => "false" })
+  isDeleted: boolean | null;
+
+  @Column({ name: "created_date", nullable: true })
+  createdDate: Date | null;
+
+  @Column({ name: "updated_date", nullable: true })
+  updatedDate: Date | null;
+
   mobileNo: string | null;
 
   email: string | null;

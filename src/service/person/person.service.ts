@@ -29,12 +29,12 @@ export class PersonService {
 
 
   public async findAll(req: Request): Promise<PersonEntity[]> {
-    return await this.personRepository.find();
+    return await this.personRepository.find({ where: "is_deleted = '" + false + "'" });
   }
 
 
   public async findById(req: Request,id: number): Promise<PersonEntity | null> {
-    let person = await this.personRepository.findOneOrFail(id);
+    let person = await this.personRepository.findOneOrFail(id,{ where: "is_deleted = '" + false + "'" });
     let res = await Promise.all([
       this.getEmailMasterByPersonId(req, person.id),
       this.getMobileMasterByPersonId(req,person.id)
@@ -50,7 +50,7 @@ export class PersonService {
   }
 
   public async findByRefIdAndRefType(req: Request,refId: number,refType:string): Promise<PersonEntity | null> {
-    let person = await this.personRepository.findOneOrFail({ where: "ref_id = '" + refId + "' and ref_type = '" + refType + "'" });
+    let person = await this.personRepository.findOneOrFail({ where: "ref_id = '" + refId + "' and ref_type = '" + refType + "' and is_deleted = '" + false + "'" });
     let res = await Promise.all([
       this.getEmailMasterByPersonId(req, person.id),
       this.getMobileMasterByPersonId(req,person.id)
@@ -70,6 +70,8 @@ export class PersonService {
   }
 
   public async create(req: Request,personEntity: PersonEntity): Promise<PersonEntity> {
+    personEntity.isDeleted = false;
+    personEntity.createdDate = new Date();
     const person = await this.personRepository.save(personEntity);
 
    if(personEntity.mobileNo){
@@ -114,6 +116,8 @@ export class PersonService {
       console.error("Email Master Entity doesn't exist");
     }
 
+    newValue.isDeleted = false;
+    personEntity.updatedDate = new Date();
     await this.personRepository.save(newValue);
     
     if(personMobileMasterEntity.mobileNo !== newValue.mobileNo){
@@ -129,8 +133,13 @@ export class PersonService {
     return await this.personRepository.findOne(id);
   }
 
-  public async delete(req: Request,id: number): Promise<DeleteResult> {
-    return await this.personRepository.delete(id);
+  public async delete(req: Request,id: number): Promise<PersonEntity> {
+    let personEntity = await this.personRepository.findOneOrFail(id);
+    if (!personEntity.id) {
+      console.error("PersonEntity doesn't exist");
+    }
+    personEntity.isDeleted = true;
+    return await this.personRepository.save(personEntity);
   }
 
 
