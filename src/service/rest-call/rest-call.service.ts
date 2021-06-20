@@ -7,6 +7,7 @@ import { VendorEntity } from 'src/entity/Vendor.entity';
 import { DriverEntity } from 'src/entity/Driver.entity';
 import { EmployeeEntity } from 'src/entity/Employee.entity';
 import { Request } from 'express';
+import { CustomerPersonAssociationsEntity } from 'src/entity/customer-person-associations.entity';
 
 @Injectable()
 export class RestCallService {
@@ -18,6 +19,10 @@ export class RestCallService {
                 this.redirectMap.set(element.selector, element.redirectUrl);
             });
         })
+    }
+
+    getHeaders(req: Request) {
+        return { 'authorization': req.headers['authorization'] ? req.headers['authorization'] : "", 'guid': req.headers['guid'] ? req.headers['guid'] : "" };
     }
 
     async findCustomerByUserId(token: string, id: number): Promise<CustomerEntity> {
@@ -46,6 +51,9 @@ export class RestCallService {
         return res.data.res;
     }
 
-
+    async deleteCustomerPersonAssociation(req: Request, custId: number, personId: number): Promise<CustomerPersonAssociationsEntity> {
+        let res: AxiosResponse<ResponseObject<CustomerPersonAssociationsEntity>> = await this.httpService.get<ResponseObject<CustomerPersonAssociationsEntity>>(process.env.ROUTER_URL + 'customer/deleteAssociationByCustomerIdAndPersonId?custId=' + custId + '&personId=' +personId, { headers: this.getHeaders(req) }).toPromise();
+        return res.data.res;
+    }
 
 }
