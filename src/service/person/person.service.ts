@@ -177,6 +177,7 @@ export class PersonService {
     await this.emailMasterRepository.save(emailMasterEntity);
 
     if (personObj.refType == 'CUSTOMER') {
+      console.log("REQUEST --------------------------------------------- "+req.headers.authorization);
       let res = await Promise.all([
         this.restCallService.deleteCustomerPersonAssociation(req, personObj.refId, personObj.id)
       ]);
@@ -190,7 +191,12 @@ export class PersonService {
   }
 
   public async getEmailMasterByPersonId(req: Request, personId: number): Promise<EmailMasterEntity | null> {
-    return await this.emailMasterRepository.findOneOrFail({ where: "person_id = '" + personId + "'" });
+    let emailMstObj = await this.emailMasterRepository.findOne({ where: "person_id = '" + personId + "'" });
+    if(emailMstObj){
+      return emailMstObj;
+    } else{
+      return null;
+    }
   }
 
   public async findByMobileNo(req: Request, mobileNo: string): Promise<PersonMobileMasterEntity | null> {
@@ -198,6 +204,11 @@ export class PersonService {
   }
 
   public async getMobileMasterByPersonId(req: Request, personId: number): Promise<PersonMobileMasterEntity | null> {
-    return await this.personMobileMasterRepository.findOneOrFail({ where: "person_id = '" + personId + "'" });
+    let personMobileObj =  await this.personMobileMasterRepository.findOne({ where: "person_id = '" + personId + "'" });
+    if(personMobileObj){
+      return personMobileObj;
+    } else{
+      return null;
+    }
   }
 }
