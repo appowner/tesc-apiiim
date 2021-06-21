@@ -16,6 +16,7 @@ import { PersonMobileMasterRepository } from 'src/repository/person-mobile-maste
 import { EmailMasterRepository } from 'src/repository/email-master-repository';
 import { EmailMasterEntity } from 'src/entity/email-master.entity';
 import { PersonMobileMasterEntity } from 'src/entity/person-mobile-master.entity';
+import { CustomerPersonAssociationsEntity } from 'src/entity/customer-person-associations.entity';
 
 // This should be a real class/interface representing a user entity
 export type User = any;
@@ -70,6 +71,9 @@ export class PersonService {
   }
 
   public async create(req: Request, personEntity: PersonEntity): Promise<PersonEntity> {
+    
+    console.log("REQUEST ================================================  "+ JSON.stringify(req));
+    console.log("REQUEST =========****************************************  "+ JSON.stringify(req.headers.authorization));
     personEntity.isDeleted = false;
     personEntity.createdDate = new Date();
     const person = await this.personRepository.save(personEntity);
@@ -92,6 +96,19 @@ export class PersonService {
       emailMasterObj.personId = person.id;
       await this.emailMasterRepository.save(emailMasterObj);
     }
+
+    if(person && person.refType == 'CUSTOMER'){
+      let customerPersonAssociation = new CustomerPersonAssociationsEntity();
+      customerPersonAssociation.customerId = person.refId;
+      customerPersonAssociation.isActive = true;
+      customerPersonAssociation.isDefault = true;
+      customerPersonAssociation.isOwner = true;
+      customerPersonAssociation.personId = person.id;
+
+      let res = await Promise.all([
+        this.restCallService.createCustomerPersonAssociation(req, customerPersonAssociation)
+      ]);
+  }
 
     return person;
   }
