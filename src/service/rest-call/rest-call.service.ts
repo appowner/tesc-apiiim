@@ -53,13 +53,13 @@ export class RestCallService {
 
     async deleteCustomerPersonAssociation(req: Request, custId: number, personId: number): Promise<CustomerPersonAssociationsEntity> {
         let res: AxiosResponse<ResponseObject<CustomerPersonAssociationsEntity>> = await this.httpService.get<ResponseObject<CustomerPersonAssociationsEntity>>(process.env.ROUTER_URL + 'customer/deleteAssociationByCustomerIdAndPersonId?custId=' + custId + '&personId=' +personId
-        , { headers: { authorization: 'Bearer ' + req }}).toPromise();
+        , { headers: { authorization: req.headers.authorization }}).toPromise();
         return res.data.res;
     }
 
     async createCustomerPersonAssociation(req: Request, customerPersonAsso: CustomerPersonAssociationsEntity): Promise<CustomerPersonAssociationsEntity> {
-        let res: AxiosResponse<ResponseObject<CustomerPersonAssociationsEntity>> = await this.httpService.post<ResponseObject<CustomerPersonAssociationsEntity>>(process.env.ROUTER_URL + 'location/createAddress',
-        customerPersonAsso, { headers: { authorization: 'Bearer ' + req }}).toPromise();;
+        let res: AxiosResponse<ResponseObject<CustomerPersonAssociationsEntity>> = await this.httpService.post<ResponseObject<CustomerPersonAssociationsEntity>>(process.env.ROUTER_URL + 'customer/createCustomerPersonAssociation',
+        customerPersonAsso, { headers: { authorization: req.headers.authorization }}).toPromise();;
         return res.data.res;
     }
 
