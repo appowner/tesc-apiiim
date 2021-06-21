@@ -72,8 +72,8 @@ export class PersonService {
 
   public async create(req: Request, personEntity: PersonEntity): Promise<PersonEntity> {
     
-    console.log("REQUEST ================================================  "+ JSON.stringify(req));
-    console.log("REQUEST =========****************************************  "+ JSON.stringify(req.headers.authorization));
+    console.log("REQUEST ================================================  "+ req);
+    console.log("REQUEST =========****************************************  "+ req.headers.authorization);
     personEntity.isDeleted = false;
     personEntity.createdDate = new Date();
     const person = await this.personRepository.save(personEntity);
