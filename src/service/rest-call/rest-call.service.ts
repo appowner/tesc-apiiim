@@ -63,4 +63,11 @@ export class RestCallService {
         return res.data.res;
     }
 
+    
+    async findPersonByCustomerIdAndPersonId(req: Request,  custId: number, personId: number): Promise<CustomerPersonAssociationsEntity> {
+        let res: AxiosResponse<ResponseObject<CustomerPersonAssociationsEntity>> = await this.httpService.get<ResponseObject<CustomerPersonAssociationsEntity>>(process.env.ROUTER_URL + 'customer/findPersonByCustomerIdAndPersonId?custId=' + custId + '&personId=' +personId,
+         { headers: { authorization: req.headers.authorization }}).toPromise();;
+        return res.data.res;
+    }
+
 }

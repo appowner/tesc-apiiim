@@ -94,7 +94,7 @@ export class PersonController {
       return ro;
     }
 
-    @Delete("/delete")
+    @Get("/delete")
     async delete(@Req() req,@Query('id') id: number): Promise<BusinessError> {
       await this.personService.delete(req,id);
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);

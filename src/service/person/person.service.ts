@@ -105,11 +105,16 @@ export class PersonService {
       customerPersonAssociation.isOwner = true;
       customerPersonAssociation.personId = person.id;
 
-      let res = await Promise.all([
-        this.restCallService.createCustomerPersonAssociation(req, customerPersonAssociation)
+      let resObj1 = await Promise.all([
+        this.restCallService. findPersonByCustomerIdAndPersonId(req, person.refId,person.id)
       ]);
+      console.log("Create Person --------------------"+resObj1[0]);
+      if(resObj1[0] == undefined){
+        let res = await Promise.all([
+          this.restCallService.createCustomerPersonAssociation(req, customerPersonAssociation)
+        ]);
+      }
   }
-
     return person;
   }
 
@@ -152,6 +157,7 @@ export class PersonService {
 
   public async delete(req: Request, id: number): Promise<PersonEntity> {
 
+    console.log("REQUEST--------------------------------------------"+req.headers.authorization);
     let personEntity = await this.personRepository.findOneOrFail(id);
     const personMobileMasterEntity = await this.personMobileMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
     const emailMasterEntity = await this.emailMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
