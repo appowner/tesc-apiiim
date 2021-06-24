@@ -53,10 +53,10 @@ export class PersonController {
     }
 
     @Post("create")
-    async create(@Req() req, @Body() person: PersonEntity): Promise<BusinessError> {      
+    async create(@Req() req, @Body() person: PersonEntity): Promise<ResponseObject<PersonEntity>> {      
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
-      await this.personService.create(req,person);        
-      return be;
+      let ro: ResponseObject<PersonEntity> = new ResponseObject(be, await this.personService.create(req,person));        
+      return ro;
     }
     
     @Post("/update")

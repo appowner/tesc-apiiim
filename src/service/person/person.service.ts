@@ -101,12 +101,12 @@ export class PersonService {
       let customerPersonAssociation = new CustomerPersonAssociationsEntity();
       customerPersonAssociation.customerId = person.refId;
       customerPersonAssociation.isActive = true;
-      customerPersonAssociation.isDefault = true;
+      customerPersonAssociation.isDefault = false;
       customerPersonAssociation.isOwner = true;
       customerPersonAssociation.personId = person.id;
 
       let resObj1 = await Promise.all([
-        this.restCallService. findPersonByCustomerIdAndPersonId(req, person.refId,person.id)
+        this.restCallService.findPersonByCustomerIdAndPersonId(req, person.refId,person.id)
       ]);
       console.log("Create Person --------------------"+resObj1[0]);
       if(resObj1[0] == undefined){
@@ -139,7 +139,7 @@ export class PersonService {
     }
 
     newValue.isDeleted = false;
-    personEntity.updatedDate = new Date();
+    newValue.updatedDate = new Date();
     await this.personRepository.save(newValue);
 
     if (personMobileMasterEntity.mobileNo !== newValue.mobileNo) {
