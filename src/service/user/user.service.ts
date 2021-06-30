@@ -10,6 +10,11 @@ import * as moment from 'moment';
 import { PasswordEncryptionService } from 'src/auth/password-encryption/password-encryption.service';
 import { RestCallService } from '../rest-call/rest-call.service';
 import { Request } from 'express';
+import { RoleRepository } from 'src/repository/role-repository';
+import { EntityMasterRepository } from 'src/repository/entity-master-repository';
+import { ClaimMasterEntity } from 'src/entity/claim-master.entity';
+import { RoleEntity } from 'src/entity/role.entity';
+import { ClaimMasterRepository } from 'src/repository/claim-master-repository';
 
 // This should be a real class/interface representing a user entity
 export type User = any;
@@ -18,7 +23,8 @@ export type User = any;
 export class UserService {
 
   constructor(private userMstRepository: UserMstRepository, private passwordEncryptionService: PasswordEncryptionService,
-    private restCallService: RestCallService) {
+    private restCallService: RestCallService, private roleRepository: RoleRepository, private entityMasterRepository: EntityMasterRepository
+    , private claimMasterRepository: ClaimMasterRepository) {
   }
 
 
@@ -138,6 +144,60 @@ export class UserService {
     }
 
     return user[0];
+  }
+
+
+  async findRoleById(id: number): Promise<RoleEntity> {
+
+    return this.roleRepository.findOne(id);
+
+  }
+
+  async createRole(role: RoleEntity): Promise<RoleEntity> {
+
+    return this.roleRepository.save(role);
+
+  }
+
+  async updateRole(role: RoleEntity): Promise<RoleEntity> {
+
+    return this.roleRepository.save(role);
+
+  }
+
+  async getRoleByUserId(userId: number): Promise<any> {
+
+    let user = await this.findById(userId);
+    if (user.roleId) {
+      let role = await this.roleRepository.findOne(user.roleId);
+      let claims = await this.claimMasterRepository.find({ where: { roleId: role.id } })
+      let entityList = await this.entityMasterRepository.findByIds(claims.map(val => val.entityId));
+      let entity;
+      let json = {};
+
+      for (let index = 0; index < claims.length; index++) {
+        const element = claims[index];
+        entity = entityList.find(val => val.id == element.entityId);
+
+        if (!json[entity.groupName]) {
+          json[entity.groupName] = []
+        }
+
+        element.entityMaster = entityList.find(val => val.id == claims[index].entityId);
+        json[entity.groupName].push(element)
+
+      }
+
+      return json;
+
+    }
+
+    return null;
+  }
+
+  async updateRoleClaims(claims : ClaimMasterEntity[]){
+    this.claimMasterRepository.save(claims);
+
   }
 
 }

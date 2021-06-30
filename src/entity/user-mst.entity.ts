@@ -50,4 +50,7 @@ export class UserMstEntity {
   @Column({ name: "forgot_pass_token_exp" })
   forgotPassTokenExp: Date;
 
+  @Column({ name: "role_id" })
+  roleId: number;
+
 }

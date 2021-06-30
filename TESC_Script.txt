@@ -131,7 +131,7 @@ CREATE SEQUENCE user_mst_sequence
 	CACHE 1
 	NO CYCLE;
 	
-	CREATE TABLE  user_mst (
+CREATE TABLE  user_mst (
   id                    bigint             	NOT NULL    DEFAULT nextval('user_mst_sequence'),
   first_name            varchar(20)         NOT NULL,
   last_name             varchar(20)         NOT NULL, 
@@ -139,6 +139,7 @@ CREATE SEQUENCE user_mst_sequence
   password              varchar(500)       	DEFAULT NULL,
   invalid_password_try  int    ,         
   address_id            bigint              NOT NULL,
+  role_id bigint,
   email             varchar(100)         NOT NULL,
   contact_number        varchar(15)          NOT NULL,
   type                  varchar(100)              NOT NULL,
@@ -148,26 +149,55 @@ CREATE SEQUENCE user_mst_sequence
   forgot_pass_token		varchar(100)              NOT NULL,
  
   PRIMARY KEY (id),
-  CONSTRAINT user_mst_address_fk FOREIGN KEY (address_id) REFERENCES address (id)
+  CONSTRAINT user_mst_address_fk FOREIGN KEY (address_id) REFERENCES address (id),
+  CONSTRAINT user_mst_role_fk FOREIGN KEY (role_id) REFERENCES role (id)
   
 );
 
-CREATE SEQUENCE role_sequence
-	INCREMENT BY 1
-	MINVALUE 1
-	MAXVALUE 9223372036854775807
-	START 1
-	CACHE 1
-	NO CYCLE;
+CREATE SEQUENCE role_sequence 	INCREMENT BY 1 	MINVALUE 1 	MAXVALUE 9223372036854775807 	START 1 	CACHE 1 	NO CYCLE;
 	
-	CREATE TABLE  role (
+CREATE TABLE  role (
 	id                  bigint            NOT NULL,
 	name                varchar(15)       NOT NULL,
 	description          varchar(50),
-	
-	  PRIMARY KEY (id)
-	);
 
+	PRIMARY KEY (id)
+);
+
+CREATE SEQUENCE entity_master_sequence 	INCREMENT BY 1 	MINVALUE 101 	MAXVALUE 9223372036854775807 	START 101 	CACHE 1 	NO CYCLE;
+	
+CREATE TABLE  entity_master (
+  id                    bigint             	NOT NULL    DEFAULT nextval('entity_master_sequence'),
+  name                  varchar(100)         NOT NULL,
+  value             varchar(100)         NOT NULL, 
+  description             varchar(1024)       	NOT NULL,
+  is_active              boolean       	DEFAULT true,  
+  group_name             varchar(100)         NOT NULL,  
+ 
+  PRIMARY KEY (id) 
+  
+);
+
+
+CREATE SEQUENCE claim_master_sequence 	INCREMENT BY 1 	MINVALUE 101 	MAXVALUE 9223372036854775807 	START 101 	CACHE 1 	NO CYCLE;
+	
+CREATE TABLE  claim_master (
+  id                    bigint             	NOT NULL    DEFAULT nextval('claim_master_sequence'),
+  role_id bigint not null,
+  entity_id bigint not null,
+  is_read boolean default true,
+  is_create boolean default true,
+  is_update boolean default true,
+  is_delete boolean default true,
+  is_purge boolean default true,
+  is_import boolean default true,
+  is_export boolean default true,
+ 
+  PRIMARY KEY (id),
+  CONSTRAINT role_id_fk FOREIGN KEY (role_id) REFERENCES role (id),
+  CONSTRAINT entity_id_fk FOREIGN KEY (entity_id) REFERENCES entity_master (id)
+  
+);
 
 CREATE SEQUENCE menu_sequence
 	INCREMENT BY 1

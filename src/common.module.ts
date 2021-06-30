@@ -42,27 +42,30 @@ import { EmailMasterEntity } from './entity/email-master.entity';
 import { EmailMasterRepository } from './repository/email-master-repository';
 import { PersonController } from './controller/person/person.controller';
 import { PersonService } from './service/person/person.service';
+import { RoleRepository } from './repository/role-repository';
+import { EntityMasterRepository } from './repository/entity-master-repository';
+import { ClaimMasterRepository } from './repository/claim-master-repository';
 
 @Module({
-    imports: [  
-      PassportModule,
-      JwtModule.register({
-        secret: jwtConstants.secret,
-        signOptions: { expiresIn: '60m' },
-      }),
-      // VendorEntity,VendorRepository,VendorContractRouteEntity,
-      // VendorBankDetailEntity,VendorContractEntity,EmployeeEntity,EmployeeRepository, DriverEntity,DriverRepository,      
-      TypeOrmModule.forFeature([AddressEntity, UserMstEntity, UserMstRepository,PersonRepository, PersonEntity,
-        PersonMobileMasterRepository,PersonMobileMasterEntity,EmailMasterEntity,EmailMasterRepository,
-       RouterConfigRepository]),
-      HttpModule
-    ],
-    providers: [AuthService, UserService, LocalStrategy, JwtStrategy,PersonService, PasswordEncryptionService, RestCallService],
-    controllers: [LoginController, AuthController, UserController,PersonController],
-    
-    exports: [AuthService]
-  })
+  imports: [
+    PassportModule,
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '60m' },
+    }),
+    // VendorEntity,VendorRepository,VendorContractRouteEntity,
+    // VendorBankDetailEntity,VendorContractEntity,EmployeeEntity,EmployeeRepository, DriverEntity,DriverRepository,      
+    TypeOrmModule.forFeature([AddressEntity, UserMstEntity, UserMstRepository, PersonRepository, PersonEntity,
+      PersonMobileMasterRepository, PersonMobileMasterEntity, EmailMasterEntity, EmailMasterRepository,
+      RouterConfigRepository, RoleRepository, EntityMasterRepository, ClaimMasterRepository]),
+    HttpModule
+  ],
+  providers: [AuthService, UserService, LocalStrategy, JwtStrategy, PersonService, PasswordEncryptionService, RestCallService],
+  controllers: [LoginController, AuthController, UserController, PersonController],
+
+  exports: [AuthService]
+})
 export class CommonModule {
 
-    
+
 }
