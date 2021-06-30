@@ -124,30 +124,33 @@ export class PersonService {
     newValue: PersonEntity,
   ): Promise<PersonEntity | null> {
     const personEntity = await this.personRepository.findOneOrFail(id);
-    const personMobileMasterEntity = await this.personMobileMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
-    const emailMasterEntity = await this.emailMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
+    let personMobileMasterEntity = null;
+    if(id){
+       personMobileMasterEntity =  await this.personMobileMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
+    }
+
+    let emailMasterEntity =null;
+    if(id){
+       emailMasterEntity = await this.emailMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
+    }
+    
+   
     if (!personEntity.id) {
       console.error("PersonEntity doesn't exist");
     }
 
-    if (!personMobileMasterEntity.MobileMasterId) {
-      console.error("PersonMobileMasterEntity doesn't exist");
-    }
-
-    if (!emailMasterEntity.EmailMasterId) {
-      console.error("Email Master Entity doesn't exist");
-    }
+    
 
     newValue.isDeleted = false;
     newValue.updatedDate = new Date();
     await this.personRepository.save(newValue);
 
-    if (personMobileMasterEntity.mobileNo !== newValue.mobileNo) {
+    if (personMobileMasterEntity && personMobileMasterEntity !== null && personMobileMasterEntity.mobileNo !== newValue.mobileNo) {
       personMobileMasterEntity.mobileNo = newValue.mobileNo;
       await this.personMobileMasterRepository.save(personMobileMasterEntity);
     }
 
-    if (emailMasterEntity.email !== newValue.email) {
+    if (emailMasterEntity && emailMasterEntity !== null && emailMasterEntity.email !== newValue.email) {
       emailMasterEntity.email = newValue.email;
       await this.emailMasterRepository.save(emailMasterEntity);
     }
