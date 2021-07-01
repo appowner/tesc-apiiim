@@ -43,6 +43,13 @@ export class UserController {
       return be;
     }
 
+    @Get("/allRole")
+    async allRole(@Query('id') id: number): Promise<ResponseObject<RoleEntity[]>> {      
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      let ro: ResponseObject<RoleEntity[]> = new ResponseObject(be, await this.userService.findAllRole())
+      return ro;
+    }
+
     @Get("/findRole")
     async findRole(@Query('id') id: number): Promise<ResponseObject<RoleEntity>> {      
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);

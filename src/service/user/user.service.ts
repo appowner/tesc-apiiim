@@ -146,6 +146,11 @@ export class UserService {
     return user[0];
   }
 
+  async findAllRole(): Promise<RoleEntity[]> {
+
+    return this.roleRepository.find();
+
+  }
 
   async findRoleById(id: number): Promise<RoleEntity> {
 
