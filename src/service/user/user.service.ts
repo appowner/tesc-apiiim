@@ -170,11 +170,9 @@ export class UserService {
 
   }
 
-  async getRoleByUserId(userId: number): Promise<any> {
+  async getRoleClaimMappingId(roleId: number): Promise<any> {
 
-    let user = await this.findById(userId);
-    if (user.roleId) {
-      let role = await this.roleRepository.findOne(user.roleId);
+      let role = await this.roleRepository.findOne(roleId);
       let claims = await this.claimMasterRepository.find({ where: { roleId: role.id } })
       let entityList = await this.entityMasterRepository.findByIds(claims.map(val => val.entityId));
       let entity;
@@ -196,16 +194,11 @@ export class UserService {
 
       return json;
 
-    }
-
-    return null;
   }
 
-  async getRoleByUserIdForUpdate(userId: number): Promise<any> {
-
-    let user = await this.findById(userId);
-    if (user.roleId) {
-      let role = await this.roleRepository.findOne(user.roleId);
+  async getRoleClaimForUpdate(roleId: number): Promise<any> {
+        
+      let role = await this.roleRepository.findOne(roleId);
       let claims = await this.claimMasterRepository.find({ where: { roleId: role.id } })
       let entityList = await this.entityMasterRepository.find();
       let entity;
@@ -226,7 +219,7 @@ export class UserService {
           claim = new ClaimMasterEntity();
           claim.entityId = entity.id;
           claim.entityMaster = entity;
-          claim.roleId = user.roleId;
+          claim.roleId = roleId;
           claim.isCreate = false;
           claim.isDelete = false;
           claim.isExport = false;
@@ -242,7 +235,7 @@ export class UserService {
       
       return json;
 
-    }
+    
 
     return null;
   }
