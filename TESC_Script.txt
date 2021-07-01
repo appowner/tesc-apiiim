@@ -157,7 +157,7 @@ CREATE TABLE  user_mst (
 CREATE SEQUENCE role_sequence 	INCREMENT BY 1 	MINVALUE 1 	MAXVALUE 9223372036854775807 	START 1 	CACHE 1 	NO CYCLE;
 	
 CREATE TABLE  role (
-	id                  bigint            NOT NULL,
+	id                  bigint            NOT NULL DEFAULT nextval('role_sequence'),
 	name                varchar(15)       NOT NULL,
 	description          varchar(50),
 

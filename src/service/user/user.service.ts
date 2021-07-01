@@ -175,6 +175,7 @@ export class UserService {
       let entity;
       let json = {};
 
+      
       for (let index = 0; index < claims.length; index++) {
         const element = claims[index];
         entity = entityList.find(val => val.id == element.entityId);
@@ -188,6 +189,52 @@ export class UserService {
 
       }
 
+      return json;
+
+    }
+
+    return null;
+  }
+
+  async getRoleByUserIdForUpdate(userId: number): Promise<any> {
+
+    let user = await this.findById(userId);
+    if (user.roleId) {
+      let role = await this.roleRepository.findOne(user.roleId);
+      let claims = await this.claimMasterRepository.find({ where: { roleId: role.id } })
+      let entityList = await this.entityMasterRepository.find();
+      let entity;
+      let json = {};
+      let claim : ClaimMasterEntity;
+
+      for (let e = 0; e < entityList.length; e++) {
+         entity = entityList[e];
+         if (!json[entity.groupName]) {
+          json[entity.groupName] = []
+        }       
+        claim = claims.find(val => val.entityId == entity.id);  
+        
+        if(claim){
+          claim.entityMaster = entity;
+          json[entity.groupName].push(claim);
+        }else{
+          claim = new ClaimMasterEntity();
+          claim.entityId = entity.id;
+          claim.entityMaster = entity;
+          claim.roleId = user.roleId;
+          claim.isCreate = false;
+          claim.isDelete = false;
+          claim.isExport = false;
+          claim.isImport = false;
+          claim.isPurge = false;
+          claim.isRead = false;
+          claim.isUpdate = false;
+          json[entity.groupName].push(claim);
+        }
+        
+      }
+
+      
       return json;
 
     }

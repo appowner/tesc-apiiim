@@ -72,6 +72,14 @@ export class UserController {
       return ro;
     }
 
+    @Get("/getRoleByUserIdForUpdate")
+    async getRoleByUserIdForUpdate(@Query('userId') id: number): Promise<ResponseObject<{}>> {      
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      let temp = await this.userService.getRoleByUserIdForUpdate(id);
+      let ro: ResponseObject<{}> = new ResponseObject(be, temp)
+      return ro;
+    }
+
     @Post("/updateRoleClaims")
     async updateRoleClaims(@Req() req, @Body() claims: ClaimMasterEntity[]): Promise<BusinessError> {      
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
