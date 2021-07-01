@@ -154,8 +154,8 @@ export class PersonService {
 
     console.log("REQUEST--------------------------------------------"+req.headers.authorization);
     let personEntity = await this.personRepository.findOneOrFail(id);
-    const personMobileMasterEntity = await this.personMobileMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
-    const emailMasterEntity = await this.emailMasterRepository.findOneOrFail({ where: "person_id = '" + id + "'" });
+    let personMobileMasterEntity = await this.personMobileMasterRepository.findOne({ where: "person_id = '" + id + "'" });
+    let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "person_id = '" + id + "'" });
 
     if (!personEntity.id) {
       console.error("PersonEntity doesn't exist");
@@ -163,20 +163,18 @@ export class PersonService {
     personEntity.isDeleted = true;
     let personObj = await this.personRepository.save(personEntity);
 
-    if (!personMobileMasterEntity.MobileMasterId) {
-      console.error("PersonMobileMasterEntity doesn't exist");
-    }
+   
+if(personMobileMasterEntity && personMobileMasterEntity !== null){
+  personMobileMasterEntity.isActive = false;
+  await this.personMobileMasterRepository.save(personMobileMasterEntity);
 
-    if (!emailMasterEntity.EmailMasterId) {
-      console.error("Email Master Entity doesn't exist");
-    }
-
-    personMobileMasterEntity.isActive = false;
-    await this.personMobileMasterRepository.save(personMobileMasterEntity);
-
-    emailMasterEntity.isActive = false;
+}
+ 
+if(emailMasterEntity && emailMasterEntity !== null){
+  emailMasterEntity.isActive = false;
     await this.emailMasterRepository.save(emailMasterEntity);
-
+}
+  
     if (personObj.refType == 'CUSTOMER') {
       console.log("REQUEST --------------------------------------------- "+req.headers.authorization);
       let res = await Promise.all([
