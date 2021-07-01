@@ -72,17 +72,17 @@ export class UserController {
     }
 
     @Get("/findRoleMapping")
-    async findRoleMapping(@Query('userId') id: number): Promise<ResponseObject<{}>> {      
+    async findRoleMapping(@Query('roleId') id: number): Promise<ResponseObject<{}>> {      
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
-      let temp = await this.userService.getRoleByUserId(id);
+      let temp = await this.userService.getRoleClaimMappingId(id);
       let ro: ResponseObject<{}> = new ResponseObject(be, temp)
       return ro;
     }
 
-    @Get("/getRoleByUserIdForUpdate")
-    async getRoleByUserIdForUpdate(@Query('userId') id: number): Promise<ResponseObject<{}>> {      
+    @Get("/getRoleClaimMappingById")
+    async getRoleByUserIdForUpdate(@Query('roleId') id: number): Promise<ResponseObject<{}>> {      
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
-      let temp = await this.userService.getRoleByUserIdForUpdate(id);
+      let temp = await this.userService.getRoleClaimForUpdate(id);
       let ro: ResponseObject<{}> = new ResponseObject(be, temp)
       return ro;
     }
