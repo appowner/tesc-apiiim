@@ -234,9 +234,12 @@ export class UserService {
 
       let list = [];
 
-      Object.keys(json).forEach(key => {
-        list.push({key : json[key]});
-      })
+      let keys = Object.keys(json);
+      for (let index = 0; index < keys.length; index++) {
+        const element = keys[index];
+        list.push({element : json[element]});
+      }
+      
       
       return list;
 
