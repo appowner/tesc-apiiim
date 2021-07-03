@@ -191,8 +191,16 @@ export class UserService {
         json[entity.groupName].push(element)
 
       }
+      let list = [];
 
-      return json;
+      let keys = Object.keys(json);
+      for (let index = 0; index < keys.length; index++) {
+        const element = keys[index];
+        list.push(JSON.parse("{\""+element+"\" : "+JSON.stringify(json[element])+"}"));
+      }
+      
+      
+      return list;
 
   }
 
@@ -243,9 +251,6 @@ export class UserService {
       
       return list;
 
-    
-
-    return null;
   }
 
   async updateRoleClaims(claims : ClaimMasterEntity[]){
