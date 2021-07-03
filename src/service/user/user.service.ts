@@ -232,8 +232,13 @@ export class UserService {
         
       }
 
+      let list = [];
+
+      Object.keys(json).forEach(key => {
+        list.push(json[key]);
+      })
       
-      return json;
+      return list;
 
     
 
