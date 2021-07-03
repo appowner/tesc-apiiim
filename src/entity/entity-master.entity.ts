@@ -16,6 +16,9 @@ export class EntityMasterEntity {
   @Column({ name: "is_active" })
   isActive: boolean;
 
+  @Column({ name: "link" })
+  link: string;
+
   @Column({ name: "group_name" })
   groupName: string;
 
