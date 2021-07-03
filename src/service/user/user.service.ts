@@ -237,7 +237,7 @@ export class UserService {
       let keys = Object.keys(json);
       for (let index = 0; index < keys.length; index++) {
         const element = keys[index];
-        list.push({element : json[element]});
+        list.push(JSON.parse("{\""+element+"\" : "+JSON.stringify(json[element])+"}"));
       }
       
       
