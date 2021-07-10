@@ -230,7 +230,7 @@ export class PersonService {
       console.error("EmailEntity doesn't exist");
     }
     emailMasterEntity.isActive = false;
-    let emailMasterObj = await this.personRepository.save(emailMasterEntity);
+    let emailMasterObj = await this.emailMasterRepository.save(emailMasterEntity);
     
     return emailMasterObj;
   }
