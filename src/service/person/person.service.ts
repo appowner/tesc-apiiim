@@ -224,7 +224,7 @@ export class PersonService {
 
     console.log("REQUEST--------------------------------------------" + req.headers.authorization);
     // let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "person_id = '" + id + "'" });
-    let emailMasterEntity = await this.emailMasterRepository.findOne(id);
+    let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "email_master_id = '" + id + "'" });
 
     if (!emailMasterEntity.EmailMasterId) {
       console.error("EmailEntity doesn't exist");
@@ -262,7 +262,7 @@ export class PersonService {
 
     console.log("REQUEST--------------------------------------------" + req.headers.authorization);
     // let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "person_id = '" + id + "'" });
-    let mobileMasterEntity = await this.personMobileMasterRepository.findOne(id);
+    let mobileMasterEntity = await this.personMobileMasterRepository.findOne({ where: "mobile_master_id = '" + id + "'" });
 
     if (!mobileMasterEntity.MobileMasterId) {
       console.error("MobileEntity doesn't exist");
