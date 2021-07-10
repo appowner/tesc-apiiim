@@ -80,6 +80,48 @@ export class PersonController {
       return ro;
     }
 
+    @Post("/createEmailMaster")
+    async createEmail(@Req() req, @Body() emailMaster: EmailMasterEntity): Promise<ResponseObject<EmailMasterEntity>> {      
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      let ro: ResponseObject<EmailMasterEntity> = new ResponseObject(be, await this.personService.createEmailMaster(req,emailMaster));        
+      return ro;
+    }
+    
+    @Post("/updateEmailMasterByPersonId")
+    async updateEmail(@Req() req, @Body() emailMaster: EmailMasterEntity): Promise<BusinessError> {      
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      await this.personService.updateEmailMasterByPersonId(req,emailMaster.EmailMasterId, emailMaster);
+      return be;
+    }
+
+    @Get("/deleteEmailMaster")
+    async deleteEmailMaster(@Req() req,@Query('id') id: number): Promise<BusinessError> {
+      await this.personService.deleteEmailMaster(req,id);
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      return be;
+    }
+    
+    @Post("/createMobileMaster")
+    async createMobileMaster(@Req() req, @Body() mobileMaster: PersonMobileMasterEntity): Promise<ResponseObject<PersonMobileMasterEntity>> {      
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      let ro: ResponseObject<PersonMobileMasterEntity> = new ResponseObject(be, await this.personService.createMobileMaster(req,mobileMaster));        
+      return ro;
+    }
+    
+    @Post("/updateMobileMasterByPersonId")
+    async updateMobileMasterByPersonId(@Req() req, @Body() mobileMaster: PersonMobileMasterEntity): Promise<BusinessError> {      
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      await this.personService.updateMobileMasterByPersonId(req,mobileMaster.MobileMasterId, mobileMaster);
+      return be;
+    }
+
+    @Get("/deleteMobileMaster")
+    async deleteMobileMaster(@Req() req,@Query('id') id: number): Promise<BusinessError> {
+      await this.personService.deleteEmailMaster(req,id);
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      return be;
+    }
+
     @Get("/findByMobileNo")
     async findByMobileNo(@Req() req,@Query('mobileNo') mobileNo: string): Promise<ResponseObject<PersonMobileMasterEntity>> {      
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
@@ -93,6 +135,8 @@ export class PersonController {
       let ro: ResponseObject<PersonMobileMasterEntity> = new ResponseObject(be, await this.personService.getMobileMasterByPersonId(req,personId))
       return ro;
     }
+
+   
 
     @Get("/delete")
     async delete(@Req() req,@Query('id') id: number): Promise<BusinessError> {

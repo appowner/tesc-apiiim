@@ -71,7 +71,7 @@ export class PersonService {
   }
 
   public async create(req: Request, personEntity: PersonEntity): Promise<PersonEntity> {
-    
+
     // console.log("REQUEST ================================================  "+ req);
     // console.log("REQUEST =========****************************************  "+ req.headers.authorization);
     personEntity.isDeleted = false;
@@ -97,7 +97,7 @@ export class PersonService {
       await this.emailMasterRepository.save(emailMasterObj);
     }
 
-    if(person && person.refType == 'CUSTOMER'){
+    if (person && person.refType == 'CUSTOMER') {
       let customerPersonAssociation = new CustomerPersonAssociationsEntity();
       customerPersonAssociation.customerId = person.refId;
       customerPersonAssociation.isActive = true;
@@ -106,15 +106,15 @@ export class PersonService {
       customerPersonAssociation.personId = person.id;
 
       let resObj1 = await Promise.all([
-        this.restCallService.findPersonByCustomerIdAndPersonId(req, person.refId,person.id)
+        this.restCallService.findPersonByCustomerIdAndPersonId(req, person.refId, person.id)
       ]);
-      console.log("Create Person --------------------"+resObj1[0]);
-      if(resObj1[0] == undefined){
+      console.log("Create Person --------------------" + resObj1[0]);
+      if (resObj1[0] == undefined) {
         let res = await Promise.all([
           this.restCallService.createCustomerPersonAssociation(req, customerPersonAssociation)
         ]);
       }
-  }
+    }
     return person;
   }
 
@@ -124,14 +124,14 @@ export class PersonService {
     newValue: PersonEntity,
   ): Promise<PersonEntity | null> {
     const personEntity = await this.personRepository.findOneOrFail(id);
-    let personMobileMasterEntity =  await this.personMobileMasterRepository.findOne({ where: "person_id = '" + id + "'" });
+    let personMobileMasterEntity = await this.personMobileMasterRepository.findOne({ where: "person_id = '" + id + "'" });
     let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "person_id = '" + id + "'" });
-   
+
     if (!personEntity.id) {
       console.error("PersonEntity doesn't exist");
     }
 
-    
+
 
     newValue.isDeleted = false;
     newValue.updatedDate = new Date();
@@ -152,7 +152,7 @@ export class PersonService {
 
   public async delete(req: Request, id: number): Promise<PersonEntity> {
 
-    console.log("REQUEST--------------------------------------------"+req.headers.authorization);
+    console.log("REQUEST--------------------------------------------" + req.headers.authorization);
     let personEntity = await this.personRepository.findOneOrFail(id);
     let personMobileMasterEntity = await this.personMobileMasterRepository.findOne({ where: "person_id = '" + id + "'" });
     let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "person_id = '" + id + "'" });
@@ -163,20 +163,20 @@ export class PersonService {
     personEntity.isDeleted = true;
     let personObj = await this.personRepository.save(personEntity);
 
-   
-if(personMobileMasterEntity && personMobileMasterEntity !== null){
-  personMobileMasterEntity.isActive = false;
-  await this.personMobileMasterRepository.save(personMobileMasterEntity);
 
-}
- 
-if(emailMasterEntity && emailMasterEntity !== null){
-  emailMasterEntity.isActive = false;
-    await this.emailMasterRepository.save(emailMasterEntity);
-}
-  
+    if (personMobileMasterEntity && personMobileMasterEntity !== null) {
+      personMobileMasterEntity.isActive = false;
+      await this.personMobileMasterRepository.save(personMobileMasterEntity);
+
+    }
+
+    if (emailMasterEntity && emailMasterEntity !== null) {
+      emailMasterEntity.isActive = false;
+      await this.emailMasterRepository.save(emailMasterEntity);
+    }
+
     if (personObj.refType == 'CUSTOMER') {
-      console.log("REQUEST --------------------------------------------- "+req.headers.authorization);
+      console.log("REQUEST --------------------------------------------- " + req.headers.authorization);
       let res = await Promise.all([
         this.restCallService.deleteCustomerPersonAssociation(req, personObj.refId, personObj.id)
       ]);
@@ -185,17 +185,92 @@ if(emailMasterEntity && emailMasterEntity !== null){
   }
 
 
+// Email Master
+
   public async findByEmail(req: Request, email: string): Promise<EmailMasterEntity | null> {
     return await this.emailMasterRepository.findOneOrFail({ where: "email = '" + email + "'" });
   }
 
   public async getEmailMasterByPersonId(req: Request, personId: number): Promise<EmailMasterEntity | null> {
     let emailMstObj = await this.emailMasterRepository.findOne({ where: "person_id = '" + personId + "'" });
-    if(emailMstObj){
+    if (emailMstObj) {
       return emailMstObj;
-    } else{
+    } else {
       return null;
     }
+  }
+
+  public async createEmailMaster(req: Request, emailMaster: EmailMasterEntity): Promise<EmailMasterEntity> {
+    const emailMasterObj = await this.emailMasterRepository.save(emailMaster);
+    return emailMasterObj;
+  }
+
+  public async updateEmailMasterByPersonId(
+    req: Request,
+    id: number,
+    newValue: EmailMasterEntity,
+  ): Promise<EmailMasterEntity | null> {
+    // let emailEntity = await this.emailMasterRepository.findOne(id);
+    let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "person_id = '" + newValue.personId + "'" });
+
+    if (!emailMasterEntity.EmailMasterId) {
+      console.error("EmailEntity doesn't exist");
+    }
+
+    return await this.emailMasterRepository.save(newValue);
+  }
+
+  public async deleteEmailMaster(req: Request, id: number): Promise<EmailMasterEntity> {
+
+    console.log("REQUEST--------------------------------------------" + req.headers.authorization);
+    // let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "person_id = '" + id + "'" });
+    let emailMasterEntity = await this.emailMasterRepository.findOne(id);
+
+    if (!emailMasterEntity.EmailMasterId) {
+      console.error("EmailEntity doesn't exist");
+    }
+    emailMasterEntity.isActive = false;
+    let emailMasterObj = await this.personRepository.save(emailMasterEntity);
+    
+    return emailMasterObj;
+  }
+
+
+  // Mobile Master
+
+  public async createMobileMaster(req: Request, mobileMaster: PersonMobileMasterEntity): Promise<PersonMobileMasterEntity> {
+    const mobileMasterObj = await this.personMobileMasterRepository.save(mobileMaster);
+    return mobileMasterObj;
+  }
+
+  public async updateMobileMasterByPersonId(
+    req: Request,
+    id: number,
+    newValue: PersonMobileMasterEntity,
+  ): Promise<PersonMobileMasterEntity | null> {
+    // let emailEntity = await this.emailMasterRepository.findOne(id);
+    let mobileMasterEntity = await this.personMobileMasterRepository.findOne({ where: "person_id = '" + newValue.personId + "'" });
+
+    if (!mobileMasterEntity.MobileMasterId) {
+      console.error("MobileEntity doesn't exist");
+    }
+
+    return await this.personMobileMasterRepository.save(newValue);
+  }
+
+  public async deleteMobileMaster(req: Request, id: number): Promise<PersonMobileMasterEntity> {
+
+    console.log("REQUEST--------------------------------------------" + req.headers.authorization);
+    // let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "person_id = '" + id + "'" });
+    let mobileMasterEntity = await this.personMobileMasterRepository.findOne(id);
+
+    if (!mobileMasterEntity.MobileMasterId) {
+      console.error("MobileEntity doesn't exist");
+    }
+    mobileMasterEntity.isActive = false;
+    let mobileMasterObj = await this.personMobileMasterRepository.save(mobileMasterEntity);
+    
+    return mobileMasterObj;
   }
 
   public async findByMobileNo(req: Request, mobileNo: string): Promise<PersonMobileMasterEntity | null> {
@@ -203,11 +278,13 @@ if(emailMasterEntity && emailMasterEntity !== null){
   }
 
   public async getMobileMasterByPersonId(req: Request, personId: number): Promise<PersonMobileMasterEntity | null> {
-    let personMobileObj =  await this.personMobileMasterRepository.findOne({ where: "person_id = '" + personId + "'" });
-    if(personMobileObj){
+    let personMobileObj = await this.personMobileMasterRepository.findOne({ where: "person_id = '" + personId + "'" });
+    if (personMobileObj) {
       return personMobileObj;
-    } else{
+    } else {
       return null;
     }
   }
+
+
 }
