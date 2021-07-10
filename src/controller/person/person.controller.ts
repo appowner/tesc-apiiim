@@ -117,7 +117,7 @@ export class PersonController {
 
     @Get("/deleteMobileMaster")
     async deleteMobileMaster(@Req() req,@Query('id') id: number): Promise<BusinessError> {
-      await this.personService.deleteEmailMaster(req,id);
+      await this.personService.deleteMobileMaster(req,id);
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
       return be;
     }
