@@ -17,6 +17,7 @@ import { EmailMasterRepository } from 'src/repository/email-master-repository';
 import { EmailMasterEntity } from 'src/entity/email-master.entity';
 import { PersonMobileMasterEntity } from 'src/entity/person-mobile-master.entity';
 import { CustomerPersonAssociationsEntity } from 'src/entity/customer-person-associations.entity';
+import { VendorPersonAssociationsEntity } from 'src/entity/vendor-person-associations.entity';
 
 // This should be a real class/interface representing a user entity
 export type User = any;
@@ -72,8 +73,6 @@ export class PersonService {
 
   public async create(req: Request, personEntity: PersonEntity): Promise<PersonEntity> {
 
-    // console.log("REQUEST ================================================  "+ req);
-    // console.log("REQUEST =========****************************************  "+ req.headers.authorization);
     personEntity.isDeleted = false;
     personEntity.createdDate = new Date();
     const person = await this.personRepository.save(personEntity);
@@ -112,6 +111,25 @@ export class PersonService {
       if (resObj1[0] == undefined) {
         let res = await Promise.all([
           this.restCallService.createCustomerPersonAssociation(req, customerPersonAssociation)
+        ]);
+      }
+    }
+
+    if (person && person.refType == 'VENDOR') {
+      let vendorPersonAssociation = new VendorPersonAssociationsEntity();
+      vendorPersonAssociation.vendorId = person.refId;
+      vendorPersonAssociation.isActive = true;
+      vendorPersonAssociation.isDefault = false;
+      vendorPersonAssociation.isOwner = true;
+      vendorPersonAssociation.personId = person.id;
+
+      let resObj1 = await Promise.all([
+        this.restCallService.findPersonByVendorIdAndPersonId(req, person.refId, person.id)
+      ]);
+      console.log("Create Person --------------------" + resObj1[0]);
+      if (resObj1[0] == undefined) {
+        let res = await Promise.all([
+          this.restCallService.createVendorPersonAssociation(req, vendorPersonAssociation)
         ]);
       }
     }
@@ -179,6 +197,13 @@ export class PersonService {
       console.log("REQUEST --------------------------------------------- " + req.headers.authorization);
       let res = await Promise.all([
         this.restCallService.deleteCustomerPersonAssociation(req, personObj.refId, personObj.id)
+      ]);
+    }
+
+    if (personObj.refType == 'VENDOR') {
+      console.log("REQUEST --------------------------------------------- " + req.headers.authorization);
+      let res = await Promise.all([
+        this.restCallService.deleteVendorPersonAssociation(req, personObj.refId, personObj.id)
       ]);
     }
     return personObj;

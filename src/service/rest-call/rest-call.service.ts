@@ -8,6 +8,7 @@ import { DriverEntity } from 'src/entity/Driver.entity';
 import { EmployeeEntity } from 'src/entity/Employee.entity';
 import { Request } from 'express';
 import { CustomerPersonAssociationsEntity } from 'src/entity/customer-person-associations.entity';
+import { VendorPersonAssociationsEntity } from 'src/entity/vendor-person-associations.entity';
 
 @Injectable()
 export class RestCallService {
@@ -70,4 +71,22 @@ export class RestCallService {
         return res.data.res;
     }
 
+    
+    async findPersonByVendorIdAndPersonId(req: Request,  vendorId: number, personId: number): Promise<VendorPersonAssociationsEntity> {
+        let res: AxiosResponse<ResponseObject<VendorPersonAssociationsEntity>> = await this.httpService.get<ResponseObject<VendorPersonAssociationsEntity>>(process.env.ROUTER_URL + 'vendor/findPersonByVendorIdAndPersonId?vendorId=' + vendorId + '&personId=' +personId,
+         { headers: { authorization: req.headers.authorization }}).toPromise();;
+        return res.data.res;
+    }
+
+    async createVendorPersonAssociation(req: Request, vendorPersonAsso: VendorPersonAssociationsEntity): Promise<VendorPersonAssociationsEntity> {
+        let res: AxiosResponse<ResponseObject<VendorPersonAssociationsEntity>> = await this.httpService.post<ResponseObject<VendorPersonAssociationsEntity>>(process.env.ROUTER_URL + 'vendor/createVendorPersonAssociation',
+        vendorPersonAsso, { headers: { authorization: req.headers.authorization }}).toPromise();;
+        return res.data.res;
+    }
+
+    async deleteVendorPersonAssociation(req: Request, vendorId: number, personId: number): Promise<VendorPersonAssociationsEntity> {
+        let res: AxiosResponse<ResponseObject<VendorPersonAssociationsEntity>> = await this.httpService.get<ResponseObject<VendorPersonAssociationsEntity>>(process.env.ROUTER_URL + 'vendor/deleteAssociationByVendorIdAndPersonId?vendorId=' + vendorId + '&personId=' +personId
+        , { headers: { authorization: req.headers.authorization }}).toPromise();
+        return res.data.res;
+    }
 }
