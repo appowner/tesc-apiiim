@@ -36,14 +36,17 @@ export class PersonService {
 
 
   public async findById(req: Request, id: number): Promise<PersonEntity | null> {
-    let person = await this.personRepository.findOneOrFail(id, { where: "is_deleted = '" + false + "'" });
-    let res = await Promise.all([
-      this.getEmailMasterByPersonId(req, person.id),
-      this.getMobileMasterByPersonId(req, person.id)
-    ]);
-
-    person.emailMasterObj = res[0];
-    person.mobileMasterObj = res[1];
+    let person = await this.personRepository.findOne(id, { where: "is_deleted = '" + false + "'" });
+    
+    if(person && person.id){
+      let res = await Promise.all([
+        this.getEmailMasterByPersonId(req, person.id),
+        this.getMobileMasterByPersonId(req, person.id)
+      ]);
+      person.emailMasterObj = res[0];
+      person.mobileMasterObj = res[1];
+    }
+    
     return person;
   }
 
