@@ -39,6 +39,12 @@ export class UserService {
     });
   }
 
+  public async findByIds(ids: number[]): Promise<UserMstEntity[] | null> {
+    return await this.userMstRepository.findByIds(ids, {
+      relations: ["address"],
+    });
+  }
+
   public async findByUserName(userName: string): Promise<UserMstEntity | null> {
     // return await this.userMstRepository.findOne({where : {userName : userName}});
     return await this.userMstRepository.findOne({ where: "LOWER(user_name) = LOWER('" + userName + "')" });

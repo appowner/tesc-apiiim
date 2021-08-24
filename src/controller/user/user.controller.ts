@@ -11,7 +11,7 @@ import { ClaimMasterEntity } from 'src/entity/claim-master.entity';
 @Controller('user')
 @UseFilters(new CustomGLobalExceptionHandler())
 export class UserController {
-
+    
     constructor(private userService: UserService) {}
 
     @Get("/all")
@@ -26,6 +26,13 @@ export class UserController {
     async get(@Query('id') id: number): Promise<ResponseObject<UserMstEntity>> {      
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
       let ro: ResponseObject<UserMstEntity> = new ResponseObject(be, await this.userService.findById(id))
+      return ro;
+    }
+
+    @Post("/findByIds")
+    async findByIds(@Body('ids') ids: number[]): Promise<ResponseObject<UserMstEntity[]>> {      
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      let ro: ResponseObject<UserMstEntity[]> = new ResponseObject(be, await this.userService.findByIds(ids))
       return ro;
     }
 
@@ -80,7 +87,8 @@ export class UserController {
     }
 
     @Get("/getRoleClaimMappingById")
-    async getRoleByUserIdForUpdate(@Query('roleId') id: number): Promise<ResponseObject<{}>> {      
+    async getRoleByUserIdForUpdate(@Query('roleId') id: number): Promise<ResponseObject<{}>> {            
+            
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
       let temp = await this.userService.getRoleClaimForUpdate(id);
       let ro: ResponseObject<{}> = new ResponseObject(be, temp)
