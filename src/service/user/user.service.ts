@@ -54,8 +54,26 @@ export class UserService {
     return await this.userMstRepository.findOne({ where: "(contact_number) = ('" + contactNo + "')" });
   }
 
-  public async create(UserMstEntity: UserMstEntity): Promise<UserMstEntity> {
-    return await this.userMstRepository.save(UserMstEntity);
+  getUniqueCode(): string {
+    return CryptoJS.lib.WordArray.random(10).toString().toUpperCase();
+  }
+
+  public async create(req, userMstEntity: UserMstEntity): Promise<UserMstEntity> {
+
+    if(userMstEntity.password){
+      userMstEntity.password = this.passwordEncryptionService.encrypt(userMstEntity.password);
+    }else{
+      userMstEntity.password = this.getUniqueCode();
+      userMstEntity.password = this.passwordEncryptionService.encrypt(userMstEntity.password);
+    }
+
+    let usr =  await this.userMstRepository.save(userMstEntity);
+    if(usr.email){
+      let mail = [];
+      mail.push(usr.email);
+      await this.restCallService.sendMail(req, mail, "New Password", "Password-: "+this.passwordEncryptionService.decrypt(usr.password));
+    }
+    return usr;
   }
 
   public async saveOTP(UserMstEntity: UserMstEntity): Promise<UserMstEntity> {
