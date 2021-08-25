@@ -37,8 +37,7 @@ export class UserController {
     }
 
     @Post("/create")
-    async create(@Req() req, @Body() user: UserMstEntity): Promise<BusinessError> {      
-      console.log("req--: "+JSON.stringify(req.body))
+    async create(@Req() req, @Body() user: UserMstEntity): Promise<BusinessError> {            
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
       await this.userService.create(req, user);        
       return be;

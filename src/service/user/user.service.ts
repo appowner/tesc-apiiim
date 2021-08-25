@@ -59,7 +59,33 @@ export class UserService {
   }
 
   public async create(req, userMstEntity: UserMstEntity): Promise<UserMstEntity> {
-    console.log("userMstEntity--: "+JSON.stringify(userMstEntity));
+    if(userMstEntity.email && userMstEntity.email.length > 0){
+      let emails = await this.userMstRepository.find({where : { email : userMstEntity.email}});
+
+      if(emails.length > 0){
+        throw new BusinessException(Constants.FAILURE_CODE, "Email aleady exists");
+      }
+      
+    }
+
+    if(userMstEntity.userName && userMstEntity.userName.length > 0){
+      let userName = await this.userMstRepository.find({where : { userName : userMstEntity.userName}});
+
+      if(userName.length > 0){
+        throw new BusinessException(Constants.FAILURE_CODE, "Username aleady exists");
+      }
+      
+    }
+
+    if(userMstEntity.contactNumber && userMstEntity.contactNumber.length > 0){
+      let contactNumber = await this.userMstRepository.find({where : { contactNumber : userMstEntity.contactNumber}});
+
+      if(contactNumber.length > 0){
+        throw new BusinessException(Constants.FAILURE_CODE, "Contact no aleady exists");
+      }
+      
+    }
+
     if(userMstEntity.password){
       userMstEntity.password = this.passwordEncryptionService.encrypt(userMstEntity.password);
     }else{
