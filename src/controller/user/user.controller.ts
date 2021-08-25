@@ -37,17 +37,19 @@ export class UserController {
     }
 
     @Post("/create")
-    async create(@Req() req, @Body() user: UserMstEntity): Promise<BusinessError> {            
+    async create(@Req() req, @Body() user: UserMstEntity): Promise<ResponseObject<UserMstEntity>> {            
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
-      await this.userService.create(req, user);        
-      return be;
+      let usr = await this.userService.create(req, user);        
+      let ro: ResponseObject<UserMstEntity> = new ResponseObject(be, usr)
+      return ro;
     }
     
     @Post("/update")
-    async update(@Req() req, @Body() user: UserMstEntity): Promise<BusinessError> {            
+    async update(@Req() req, @Body() user: UserMstEntity): Promise<ResponseObject<UserMstEntity>> {            
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
-      await this.userService.update(user.id, user);
-      return be;
+      let usr = await this.userService.update(user.id, user);
+      let ro: ResponseObject<UserMstEntity> = new ResponseObject(be, usr)
+      return ro;
     }
 
     @Get("/allRole")
