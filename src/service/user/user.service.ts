@@ -59,7 +59,7 @@ export class UserService {
   }
 
   public async create(req, userMstEntity: UserMstEntity): Promise<UserMstEntity> {
-
+    console.log("userMstEntity--: "+JSON.stringify(userMstEntity));
     if(userMstEntity.password){
       userMstEntity.password = this.passwordEncryptionService.encrypt(userMstEntity.password);
     }else{
