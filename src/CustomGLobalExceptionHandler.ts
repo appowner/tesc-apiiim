@@ -42,6 +42,6 @@ export class CustomGLobalExceptionHandler extends BaseExceptionFilter {
     console.log("ro--: "+JSON.stringify(ro));
     response
       .status(status)
-      .json(ro);
+      .json(JSON.stringify(ro));
   }
 }
