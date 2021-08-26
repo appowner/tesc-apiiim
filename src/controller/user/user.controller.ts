@@ -52,6 +52,13 @@ export class UserController {
       return ro;
     }
 
+    @Get("/delete")
+    async delete(@Query('id') id: number):Promise<BusinessError> {      
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+       await this.userService.delete(id);
+      return be;
+    }
+
     @Get("/allRole")
     async allRole(@Query('id') id: number): Promise<ResponseObject<RoleEntity[]>> {      
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
