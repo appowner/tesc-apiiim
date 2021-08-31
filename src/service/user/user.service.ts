@@ -93,8 +93,9 @@ export class UserService {
       userMstEntity.password = this.passwordEncryptionService.encrypt(userMstEntity.password);
     }
 
-    let usr = await this.userMstRepository.save(userMstEntity);
-    if (usr.email) {
+    userMstEntity.createdDate = new Date();
+    let usr =  await this.userMstRepository.save(userMstEntity);
+    if(usr.email){
       let mail = [];
       mail.push(usr.email);
       await this.restCallService.sendMail(req, mail, "TESC Logistics - A Revolution in 3PL", this.welcomeUserMailHtml.replace("[user]", usr.firstName));
@@ -116,11 +117,15 @@ export class UserService {
       // tslint:disable-next-line:no-console
       console.error("UserMstEntity doesn't exist");
     }
+    newValue.updatedDate = new Date();
     await this.userMstRepository.save(newValue);
     return await this.userMstRepository.findOne(id);
   }
 
   public async delete(id: number): Promise<DeleteResult> {
+
+    // let userMst = this.userMstRepository.findOne(id);
+    // (await userMst).active = false
     return await this.userMstRepository.delete(id);
   }
 

@@ -7,6 +7,9 @@ export class UserMstEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: "name" })
+  name: string;
+
   @Column({ name: "first_name" })
   firstName: string;
 
@@ -31,7 +34,7 @@ export class UserMstEntity {
   @Column({ name: "type" })
   type: string;
 
-  @Column()
+  @Column("boolean", { name: "active", nullable: true, default: () => "true" })
   active: boolean;
 
   @Column({ name: "otp" })
@@ -52,5 +55,16 @@ export class UserMstEntity {
 
   @Column({ name: "role_id" })
   roleId: number;
+
+  @Column({ name: "created_date", nullable: true })
+  createdDate: Date | null;
+
+  @Column({ name: "updated_date", nullable: true })
+  updatedDate: Date | null;
+
+  @Column({ name: "created_by", nullable: true })
+  createdBy: string | null;
+
+
 
 }
