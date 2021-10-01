@@ -94,8 +94,8 @@ export class UserService {
     }
 
     userMstEntity.createdDate = new Date();
-    let usr =  await this.userMstRepository.save(userMstEntity);
-    if(usr.email){
+    let usr = await this.userMstRepository.save(userMstEntity);
+    if (usr.email) {
       let mail = [];
       mail.push(usr.email);
       await this.restCallService.sendMail(req, mail, "TESC Logistics - A Revolution in 3PL", this.welcomeUserMailHtml.replace("[user]", usr.firstName));
@@ -232,7 +232,7 @@ export class UserService {
     let claims = await this.claimMasterRepository.find({ where: { roleId: role.id } })
     let entityList = await this.entityMasterRepository.findByIds(claims.map(val => val.entityId));
     let entity;
-    let json = { };
+    let json = {};
 
 
     for (let index = 0; index < claims.length; index++) {
@@ -244,7 +244,10 @@ export class UserService {
       }
 
       element.entityMaster = entityList.find(val => val.id == claims[index].entityId);
-      json[entity.groupName].push(element)
+      if (claims[index].isCreate == true || claims[index].isDelete == true || claims[index].isExport == true || claims[index].isImport == true ||
+        claims[index].isPurge == true || claims[index].isRead == true || claims[index].isUpdate == true) {
+        json[entity.groupName].push(element)
+      }
 
     }
     let list = [];
@@ -266,7 +269,7 @@ export class UserService {
     let claims = await this.claimMasterRepository.find({ where: { roleId: role.id } })
     let entityList = await this.entityMasterRepository.find();
     let entity;
-    let json = { };
+    let json = {};
     let claim: ClaimMasterEntity;
 
     for (let e = 0; e < entityList.length; e++) {

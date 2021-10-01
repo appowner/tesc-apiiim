@@ -172,6 +172,7 @@ CREATE TABLE  entity_master (
   value             varchar(100)         NOT NULL, 
   description             varchar(1024)       	NOT NULL,
   is_active              boolean       	DEFAULT true,  
+  link             varchar(100)         NOT NULL,  
   group_name             varchar(100)         NOT NULL,  
  
   PRIMARY KEY (id) 
