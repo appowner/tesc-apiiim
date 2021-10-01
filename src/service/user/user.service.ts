@@ -239,14 +239,18 @@ export class UserService {
       const element = claims[index];
       entity = entityList.find(val => val.id == element.entityId);
 
-      if (!json[entity.groupName]) {
-        json[entity.groupName] = []
-      }
-
-      element.entityMaster = entityList.find(val => val.id == claims[index].entityId);
       if (claims[index].isCreate == true || claims[index].isDelete == true || claims[index].isExport == true || claims[index].isImport == true ||
         claims[index].isPurge == true || claims[index].isRead == true || claims[index].isUpdate == true) {
-        json[entity.groupName].push(element)
+
+        if (!json[entity.groupName]) {
+          json[entity.groupName] = []
+        }
+
+        element.entityMaster = entityList.find(val => val.id == claims[index].entityId);
+        if (claims[index].isCreate == true || claims[index].isDelete == true || claims[index].isExport == true || claims[index].isImport == true ||
+          claims[index].isPurge == true || claims[index].isRead == true || claims[index].isUpdate == true) {
+          json[entity.groupName].push(element)
+        }
       }
 
     }
