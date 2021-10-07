@@ -55,7 +55,7 @@ export class RestCallService {
     async sendOTP(req: Request, mobileNo: string, otp: string): Promise<ResponseObject<any>> {
         let res: AxiosResponse<ResponseObject<ResponseObject<{}>>> = await this.httpService.post<ResponseObject<ResponseObject<{}>>>(process.env.ROUTER_URL + 'notification/sendOTP',
             { mobileNO: mobileNo, otp: otp}).toPromise();
-        return res.data.res;
+        return res.data;
     }
 
     async deleteCustomerPersonAssociation(req: Request, custId: number, personId: number): Promise<CustomerPersonAssociationsEntity> {
