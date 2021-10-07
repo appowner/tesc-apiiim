@@ -15,7 +15,7 @@ export class AuthController {
 
   // @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body("userName") userName: string, @Body("password") password: string, @Body("otp") otp: string): Promise<ResponseObject<{}>> {
+  async login(@Body("userName") userName: string, @Body("password") password: string, @Body("otp") otp: string): Promise<ResponseObject<{}>> {    
     return this.authService.login(userName, password,otp);
   }
 
@@ -39,7 +39,7 @@ export class AuthController {
 
   @Post('getotp')
   async getotp(@Body("contactNo") contactNo: string, @Req() req): Promise<ResponseObject<{}>> {
-    return this.authService.generateOtp(contactNo);
+    return this.authService.generateOtp(req, contactNo);
   }
 
 

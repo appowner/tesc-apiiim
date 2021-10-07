@@ -74,7 +74,7 @@ export class AuthService {
     }
 
     async login(username: string, password: string, otp: string): Promise<ResponseObject<{}>> {
-        if(username && password){
+        if(username && password){            
             return await this.validateUser(username, password);
         } else if(username && otp){
             return await this.validateOtp(username, otp);
@@ -97,7 +97,7 @@ export class AuthService {
 
     }
 
-    async generateOtp(contactNo: string): Promise<ResponseObject<{}>> {
+    async generateOtp(req, contactNo: string): Promise<ResponseObject<{}>> {
         const user = await this.usersService.findByContactNumber(contactNo);
         if (user) {
             // zelle
@@ -124,6 +124,11 @@ export class AuthService {
 
             user.otp = otp.toString();
             user.otpTime = new Date(Date.now());
+            let res = await this.restCallService.sendOTP(req, contactNo, user.otp);
+            console.log("OTP response"+JSON.stringify(res));
+            if(res.res.Status && res.res.Status !="Success"){
+                throw new BusinessException(Constants.FAILURE_CODE, "OTP send failed, try again after some times");
+            }
             await this.usersService.saveOTP(user);
             let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
             let ro: ResponseObject<{}> = new ResponseObject(be, map);
