@@ -147,6 +147,8 @@ export class PersonService {
     id: number,
     newValue: PersonEntity,
   ): Promise<PersonEntity | null> {
+
+    console.log("Console Log------------PERSON-------------------------------"+JSON.stringify(newValue));
     const personEntity = await this.personRepository.findOneOrFail(id);
     let personMobileMasterEntity = await this.personMobileMasterRepository.findOne({ where: "person_id = '" + id + "'" });
     let emailMasterEntity = await this.emailMasterRepository.findOne({ where: "person_id = '" + id + "'" });
@@ -164,6 +166,17 @@ export class PersonService {
     if (personMobileMasterEntity && personMobileMasterEntity !== null && personMobileMasterEntity.mobileNo !== newValue.mobileNo) {
       personMobileMasterEntity.mobileNo = newValue.mobileNo;
       await this.personMobileMasterRepository.save(personMobileMasterEntity);
+    } else {
+
+      if (newValue.mobileNo) {
+        let personMobileMasterObj = new PersonMobileMasterEntity();
+        personMobileMasterObj.isActive = true;
+        personMobileMasterObj.isDefault = true;
+        personMobileMasterObj.mobileNo = newValue.mobileNo;
+        personMobileMasterObj.personId = id;
+        await this.personMobileMasterRepository.save(personMobileMasterObj);
+      }
+      
     }
 
     if (emailMasterEntity && emailMasterEntity !== null && emailMasterEntity.email !== newValue.email) {
