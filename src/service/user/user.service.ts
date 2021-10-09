@@ -9,7 +9,7 @@ import * as CryptoJS from 'crypto-js';
 import * as moment from 'moment';
 import { PasswordEncryptionService } from 'src/auth/password-encryption/password-encryption.service';
 import { RestCallService } from '../rest-call/rest-call.service';
-import { Request } from 'express';
+import { query, Request } from 'express';
 import { RoleRepository } from 'src/repository/role-repository';
 import { EntityMasterRepository } from 'src/repository/entity-master-repository';
 import { ClaimMasterEntity } from 'src/entity/claim-master.entity';
@@ -92,6 +92,17 @@ export class UserService {
       userMstEntity.password = this.getUniqueCode();
       userMstEntity.password = this.passwordEncryptionService.encrypt(userMstEntity.password);
     }
+
+if(userMstEntity.type != 'EMPLOYEE'){
+
+    let resObj = await Promise.all([
+       this.findRoleByKey(userMstEntity.type)
+  ]);
+
+  if(resObj){
+      userMstEntity.roleId = resObj[0].id;
+  }
+}
 
     userMstEntity.createdDate = new Date();
     let usr = await this.userMstRepository.save(userMstEntity);
@@ -205,6 +216,13 @@ export class UserService {
   async findAllRole(): Promise<RoleEntity[]> {
 
     return this.roleRepository.find();
+
+  }
+
+  async findRoleByKey(key: string): Promise<RoleEntity> {
+
+     let query = "key = '" + key + "'  ";
+    return this.roleRepository.findOne({where: query});
 
   }
 

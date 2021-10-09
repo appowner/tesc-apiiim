@@ -66,6 +66,13 @@ export class UserController {
       return ro;
     }
 
+    @Get("/findRoleByKey")
+    async findRoleByKey(@Query('key') key: string): Promise<ResponseObject<RoleEntity>> {
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      let ro: ResponseObject<RoleEntity> = new ResponseObject(be, await this.userService.findRoleByKey(key))
+      return ro;
+    }
+
     @Get("/findRole")
     async findRole(@Query('id') id: number): Promise<ResponseObject<RoleEntity>> {      
       let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);

@@ -14,4 +14,8 @@ export class RoleEntity {
   @Column({ name: "description" })
   description: string;
 
+  
+  @Column({ name: "key" })
+  key: string;
+
 }
