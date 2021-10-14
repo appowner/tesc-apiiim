@@ -124,7 +124,7 @@ export class AuthService {
 
             user.otp = otp.toString();
             user.otpTime = new Date(Date.now());
-            let res = await this.restCallService.sendOTP(req, contactNo, user.otp);
+            let res = await this.restCallService.sendOTP(req, contactNo, otp.toString());
             console.log("OTP response"+JSON.stringify(res));
             if(res.res.Status && res.res.Status !="Success"){
                 throw new BusinessException(Constants.FAILURE_CODE, "OTP send failed, try again after some times");
