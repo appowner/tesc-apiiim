@@ -18,6 +18,7 @@ import { EmailMasterEntity } from 'src/entity/email-master.entity';
 import { PersonMobileMasterEntity } from 'src/entity/person-mobile-master.entity';
 import { CustomerPersonAssociationsEntity } from 'src/entity/customer-person-associations.entity';
 import { VendorPersonAssociationsEntity } from 'src/entity/vendor-person-associations.entity';
+import { listenerCount } from 'process';
 
 // This should be a real class/interface representing a user entity
 export type User = any;
@@ -31,7 +32,25 @@ export class PersonService {
 
 
   public async findAll(req: Request): Promise<PersonEntity[]> {
-    return await this.personRepository.find({ where: "is_deleted = '" + false + "'" });
+    let promiseList = [];
+    let list = await this.personRepository.find({ where: "is_deleted = '" + false + "'" });
+
+    await list.forEach(per => {
+      promiseList.push(new Promise(async (suc, err) => {
+          let res = await Promise.all([
+            this.getEmailMasterByPersonId(req, per.id),
+            this.getMobileMasterByPersonId(req, per.id)
+          ]);
+          per.emailMasterObj = res[0];
+          per.mobileMasterObj = res[1];
+         
+          suc("");
+      }));
+
+  })
+
+  await Promise.all(promiseList);
+  return list;
   }
 
 
