@@ -109,8 +109,8 @@ if(userMstEntity.type != 'EMPLOYEE'){
     if (usr.email) {
       let mail = [];
       mail.push(usr.email);
-      await this.restCallService.sendMail(req, mail, "TESC Logistics - A Revolution in 3PL", this.welcomeUserMailHtml.replace("[user]", usr.firstName));
-      await this.restCallService.sendMail(req, mail, "TESC Logistics - A Revolution in 3PL Password", "Password-: " + this.passwordEncryptionService.decrypt(usr.password));
+      await this.restCallService.sendMail(req, mail, "TESC Logistics - A Revolution in 3PL", this.welcomeUserMailHtml.replace("[user]", usr.firstName).replace("[password]",this.passwordEncryptionService.decrypt(usr.password)));
+      //await this.restCallService.sendMail(req, mail, "TESC Logistics - A Revolution in 3PL Password", "Password-: " + this.passwordEncryptionService.decrypt(usr.password));
     }
     return usr;
   }
@@ -361,6 +361,7 @@ if(userMstEntity.type != 'EMPLOYEE'){
     "        <td style=\"background:rgb(247, 247, 247); text-align: center; padding: 20px;  font-size: 20px;\"class=\"font\">\n" +
     "          Thank you for Register at  <br><a style=\"text-decoration: none; color: #000; font-size: 30px; font-weight: 800;\" title=\"TESC Logistics Redefined\" href=\"https://tesc.in/\" target=\"_blank\">TESC Logistics Redefined</a>\n" +
     "\t\t  <br>We will reach you very soon as Possible !!!\n" +
+    "\t\t  <br>Your password for login is :- [password]\n" +
     "        </td>\n" +
     "      </tr>\n" +
     "      <tr>\n" +
