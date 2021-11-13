@@ -160,7 +160,8 @@ if(userMstEntity.type != 'EMPLOYEE'){
     if (users[0].type === "CUSTOMER") {
       let mail = [];
       mail.push(email);
-      await this.restCallService.sendMail(req, mail, "Forgot Password", process.env.CUSTOMER_FORGOT_PASSWORD_URL + token);
+      var html = this.forgotpasswordHtml.replace("[user]", users.firstName).replace("[LINK]",process.env.CUSTOMER_FORGOT_PASSWORD_URL + token);
+      await this.restCallService.sendMail(req, mail, "Forgot Password",html );
     } else {
 
       throw new BusinessException(Constants.FAILURE_CODE, "Forgot password not implemented for user type-:" + users[0].type)
@@ -411,6 +412,79 @@ if(userMstEntity.type != 'EMPLOYEE'){
     "        </td>\n" +
     "      </tr>\n" +
     "</tbody></table>\n" +
-    "</div>"
+    "</div>";
+
+    forgotpasswordHtml = "<style>\n" +
+    ".font{\n" +
+    "font-family:'Segoe UI','Apple SD Gothic Neo','Lucida Grande','Lucida Sans Unicode','sans-serif';\n" +
+    "}\n" +
+    "</style>\n" +
+    "<div bgcolor=\"#FFFFFF\" marginwidth=\"0\" marginheight=\"0\">\n" +
+    "    <table id=\"m_2515312712125314003Table_01\" width=\"600\" align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n" +
+    "      <tbody><tr>\n" +
+    "        <td style=\"background:rgb(0, 0, 0);text-align:center;padding:20px 0\" class=\"font\">\n" +
+    "          <a href=\"https://tesc.in/\" target=\"_blank\" title=\"TESC Logistics Redefined\"><img src=\"https://i1.wp.com/tesc.in/wp-content/uploads/2021/03/cropped-Tesc-Logo-Website-05-1.png?w=500&ssl=1\" height=\"150\" alt=\"TESC Logistics Redefined\" class=\"tesc\"></a>\n" +
+    "        </td>\n" +
+    "      </tr>\n" +
+    "\t  <tr>\n" +
+    "        <td style=\"    background: rgb(247, 247, 247);text-align: left;padding: 20px;font-size: 16px;font-weight: 400;\" class=\"font\">\n" +
+    "          Dear [user],\n" +
+    "        </td>\n" +
+    "      </tr>\n" +
+    "\t  <tr>\n" +
+    "        <td style=\"background:rgb(247, 247, 247); text-align: center; padding: 20px;  font-size: 20px;\"class=\"font\">\n" +
+    "          Thank you for Requesting Rest password. Please use below button to reset your password. <br><a style=\"text-decoration: none; color: #000; font-size: 30px; font-weight: 800;\" title=\"Reset Password\" href=\"[LINK]\" target=\"_blank\">Reset Password</a>\n" +
+    
+    "        </td>\n" +
+    "      </tr>\n" +
+    "      <tr>\n" +
+    "        <td style=\"padding:20px 0;background:#efefef\">\n" +
+    "          <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n" +
+    "            <tbody><tr>\n" +
+    "\t\t\t   \n" +
+    "              <td style=\"font-size:16px;color:#373435;text-align:justify;margin:20px 20px;background:#ffffff;letter-spacing:.68px;padding:15px;border-radius:5px;display:block;font-weight:600\" class=\"font\">\n" +
+    "              TESC Logistics - A Revolution in 3PL\n" +
+    "              <br>\n" +
+    "\t\t\t  <br>\n" +
+    "\t\t\t  Tech Enabled Supply Chain(Tesc), brings to you convenience and efficiency while moving your goods. Our focus is simplifying logistics via tech that helps our customers to move their freight with ease. \n" +
+    "              <br>\n" +
+    "\t\t\t  <br>\n" +
+    "\t\t\t  \n" +
+    "</td>\n" +
+    "            </tr>\n" +
+    "          </tbody></table>\n" +
+    "        </td>\n" +
+    "      </tr>\n" +
+    "      <tr>\n" +
+    "        <td style=\"background-color:#000000;padding:25px 0 25px 30px\">\n" +
+    "          <table style=\"width:100%\" cellpadding=\"0\" cellspacing=\"0\">\n" +
+    "            <tbody><tr>\n" +
+    "              <td>\n" +
+    "                <table style=\"width:100%\" cellpadding=\"0\" cellspacing=\"0\">\n" +
+    "                  <tbody><tr>\n" +
+    "                    <td style=\"font-size:20px;font-weight:700;color:#ffffff\" class=\"font\">Thanks,</td>\n" +
+    "                  </tr>\n" +
+    "                  <tr>\n" +
+    "                    <td style=\"font-size:14px;color:#ffffff\" class=\"font\">TESC Logistics Redefined Team</td>\n" +
+    "                  </tr>\n" +
+    "                  <tr>\n" +
+    "                    <td><a href=\"mailto:enquiry@tesc.in\" title=\"enquiry@tesc.in\" class=\"font\" style=\"font-size:14px;color:#ffffff;text-decoration:none\" target=\"_blank\">enquiry@tesc.in</a>\n" +
+    "                  </td>\n" +
+    "                </tr>\n" +
+    "              </tbody></table>\n" +
+    "            </td>\n" +
+    "          </tr>\n" +
+    "\n" +
+    "</tbody></table>\n" +
+    "</td>\n" +
+    "</tr>\n" +
+    "<tr>\n" +
+    "        <td style=\"background:#fff; text-align: center; padding: 5px 0;  font-size: 12px;\" class=\"font\">\n" +
+    "          Design and Develop by <a style=\"text-decoration: none; font-weight: 600; color: #000;;\" title=\"TESC Logistics Redefined\" href=\"https://www.vihaainfotech.com/\" title=\"Vihaa Infotech\" target=\"_blank\">Vihaa Infotech</a>\n" +
+    "        </td>\n" +
+    "      </tr>\n" +
+    "</tbody></table>\n" +
+    "</div>";
 
 }
+
