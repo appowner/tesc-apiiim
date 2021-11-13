@@ -433,7 +433,7 @@ if(userMstEntity.type != 'EMPLOYEE'){
     "      </tr>\n" +
     "\t  <tr>\n" +
     "        <td style=\"background:rgb(247, 247, 247); text-align: center; padding: 20px;  font-size: 20px;\"class=\"font\">\n" +
-    "          Thank you for Requesting Reset password. <br/> Please use below button to reset your password. <br><a style=\"text-decoration: none; color: #000; font-size: 30px; font-weight: 800;\" title=\"Reset Password\" href=\"[LINK]\" target=\"_blank\">Reset Password</a>\n" +
+    "          Forgot your Password? <br/><br/> We have received a request to reset your password. If you did not make this request, you may ignore this email. <br><a style=\"background-color: black; font-weight: bold; color:white; border:none;padding: 10px 15px; border-radius: 5px;cursor: pointer; margin: 0 auto;display: block;\" title=\"Reset Password\" href=\"[LINK]\" target=\"_blank\">Reset Password</a>\n" +
     
     "        </td>\n" +
     "      </tr>\n" +
