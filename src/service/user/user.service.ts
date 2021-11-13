@@ -160,7 +160,7 @@ if(userMstEntity.type != 'EMPLOYEE'){
     if (users[0].type === "CUSTOMER") {
       let mail = [];
       mail.push(email);
-      var html = this.forgotpasswordHtml.replace("[user]", users.firstName).replace("[LINK]",process.env.CUSTOMER_FORGOT_PASSWORD_URL + token);
+      var html = this.forgotpasswordHtml.replace("[user]", users[0].firstName).replace("[LINK]",process.env.CUSTOMER_FORGOT_PASSWORD_URL + token);
       await this.restCallService.sendMail(req, mail, "Forgot Password",html );
     } else {
 
@@ -433,7 +433,7 @@ if(userMstEntity.type != 'EMPLOYEE'){
     "      </tr>\n" +
     "\t  <tr>\n" +
     "        <td style=\"background:rgb(247, 247, 247); text-align: center; padding: 20px;  font-size: 20px;\"class=\"font\">\n" +
-    "          Thank you for Requesting Rest password. Please use below button to reset your password. <br><a style=\"text-decoration: none; color: #000; font-size: 30px; font-weight: 800;\" title=\"Reset Password\" href=\"[LINK]\" target=\"_blank\">Reset Password</a>\n" +
+    "          Thank you for Requesting Reset password. <br/> Please use below button to reset your password. <br><a style=\"text-decoration: none; color: #000; font-size: 30px; font-weight: 800;\" title=\"Reset Password\" href=\"[LINK]\" target=\"_blank\">Reset Password</a>\n" +
     
     "        </td>\n" +
     "      </tr>\n" +
