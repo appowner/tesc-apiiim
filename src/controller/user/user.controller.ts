@@ -118,4 +118,11 @@ export class UserController {
       return be;
     }
 
+    @Get("/findUserByUserName")
+    async findUserByUserName(@Query('username') username: string): Promise<ResponseObject<UserMstEntity>> {
+      let be: BusinessError = new BusinessError(Constants.SUCCESS_CODE, Constants.SUCCESS_RES);
+      let ro: ResponseObject<UserMstEntity> = new ResponseObject(be, await this.userService.findUserByUserName(username))
+      return ro;
+    }
+
 }

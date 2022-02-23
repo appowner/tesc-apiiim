@@ -227,6 +227,14 @@ if(userMstEntity.type != 'EMPLOYEE'){
 
   }
 
+  
+  async findUserByUserName(username: string): Promise<UserMstEntity> {
+
+    let query = "user_name = '" + username + "'  ";
+   return this.userMstRepository.findOne({where: query});
+
+ }
+
   async findRoleById(id: number): Promise<RoleEntity> {
 
     return this.roleRepository.findOne(id);

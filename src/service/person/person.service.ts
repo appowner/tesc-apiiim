@@ -19,6 +19,7 @@ import { PersonMobileMasterEntity } from 'src/entity/person-mobile-master.entity
 import { CustomerPersonAssociationsEntity } from 'src/entity/customer-person-associations.entity';
 import { VendorPersonAssociationsEntity } from 'src/entity/vendor-person-associations.entity';
 import { listenerCount } from 'process';
+import { UserService } from '../user/user.service';
 
 // This should be a real class/interface representing a user entity
 export type User = any;
@@ -27,7 +28,7 @@ export type User = any;
 export class PersonService {
 
   constructor(private personRepository: PersonRepository, private emailMasterRepository: EmailMasterRepository, private personMobileMasterRepository: PersonMobileMasterRepository, private passwordEncryptionService: PasswordEncryptionService,
-    private restCallService: RestCallService) {
+    private restCallService: RestCallService, private userService: UserService) {
   }
 
 
@@ -100,6 +101,20 @@ export class PersonService {
 
     personEntity.isDeleted = false;
     personEntity.createdDate = new Date();
+
+    if(personEntity.isAUser && personEntity.refUserId == null &&  personEntity.refType == 'CUSTOMER'){
+      let resCustomer = await Promise.all([
+        this.restCallService.findCustomerByCustomerId(req, personEntity.refId)
+      ]);
+      if(resCustomer[0]){
+        let resUserObj = await Promise.all([
+          this.userService.findUserByUserName(resCustomer[0].userName)
+        ]);
+        if(resUserObj[0]){
+          personEntity.refUserId = resUserObj[0].id;
+        }
+      }
+    }
     const person = await this.personRepository.save(personEntity);
 
     if (personEntity.mobileNo) {
@@ -138,6 +153,8 @@ export class PersonService {
           this.restCallService.createCustomerPersonAssociation(req, customerPersonAssociation)
         ]);
       }
+
+     
     }
 
     if (person && person.refType == 'VENDOR') {
